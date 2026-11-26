@@ -1,0 +1,3627 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Banco de Questões — Direito EAD (Módulo 2)</title>
+
+  <!-- Fonte Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* Ajustes sutis para experiência nativa em iPad e smartphone */
+    html {
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .safe-bottom {
+      padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    }
+    .safe-top {
+      padding-top: max(0.75rem, env(safe-area-inset-top));
+    }
+    @keyframes fadeSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-card {
+      animation: fadeSlideUp 0.22s ease-out;
+    }
+    @keyframes popIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    .animate-modal {
+      animation: popIn 0.18s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen antialiased selection:bg-indigo-200 dark:selection:bg-indigo-800">
+  <!-- Contêiner principal renderizado dinamicamente -->
+  <div id="app" class="min-h-screen flex flex-col"></div>
+
+  <!-- Modal Global (Mapa de Questões, Conclusão, Confirmação) -->
+  <div id="modal-root" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm"></div>
+
+  <!-- Toast discreto para feedback de ações -->
+  <div id="toast-root" class="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 translate-y-2"></div>
+
+  <script>
+    /* ==========================================================================
+       BANCO DE DADOS COMPLETO — 163 QUESTÕES (4 MATÉRIAS)
+       Gabaritos 100% fiéis aos arquivos oficiais informados.
+       ========================================================================== */
+    const SUBJECTS = [
+      {
+        id: 'civil',
+        title: 'Direito Civil',
+        shortTitle: 'Direito Civil',
+        color: 'indigo',
+        icon: 'scale',
+        notice: null,
+        questions: [
+          {
+            num: 1,
+            answer: 'B',
+            stem: `Considerando a incapacidade, julgue os itens que se seguem indicando se estão corretos ou não assinalando V (verdadeiro) ou F (falso):
+( ) A menoridade cessa aos dezoito anos completos, quando a pessoa fica habilitada à prática de todos os atos da vida civil.
+( ) A incapacidade cessa pelo casamento, especialmente nos casos de gravidez;
+( ) Somente a idade assegura a transição do sujeito incapaz para o exercício dos atos da vida civil;
+( ) A incapacidade não cessa pelo estabelecimento civil ou comercial, ou pela existência de relação de emprego, desde que, em função deles, o menor com dezesseis anos completos tenha economia própria;
+( ) Cessará, para os menores, a incapacidade pela colação de grau em curso de ensino superior;`,
+            options: {
+              A: 'F, V, F, F, F.',
+              B: 'V, F, F, F, V.',
+              C: 'F, F, F, F, F.',
+              D: 'V, V, V, V, V.',
+              E: 'V, V, F, F, V.'
+            }
+          },
+          {
+            num: 2,
+            answer: 'C',
+            stem: `São bens imóveis o solo e tudo quanto se lhe incorporar natural ou artificialmente. De outro lado, são móveis os bens suscetíveis de movimento próprio, ou de remoção por força alheia, sem alteração da substância ou da destinação econômico-social. Com relação ao assunto, identifique como verdadeiras (V) ou falsas (F) as seguintes afirmativas:
+( ) Consideram-se imóveis para os efeitos legais os direitos reais sobre imóveis e as ações que os asseguram.
+( ) Consideram-se móveis para os efeitos legais o direito à sucessão aberta.
+( ) Consideram-se imóveis para os efeitos legais os materiais provenientes da demolição de algum prédio.
+( ) Consideram-se móveis para os efeitos legais os direitos pessoais de caráter patrimonial e respectivas ações.
+Assinale a alternativa que apresenta a sequência CORRETA, de cima para baixo.`,
+            options: {
+              A: 'F - V - V - F.',
+              B: 'V - V - F - F.',
+              C: 'V - F - F - V.',
+              D: 'F - V - F - V.',
+              E: 'V - F - V - F.'
+            }
+          },
+          {
+            num: 3,
+            answer: 'C',
+            stem: `Acerca da classificação de bens, julgue os itens a seguir:
+I - Os bens divisíveis são sempre infungíveis.
+II - Os materiais provisoriamente separados de um prédio, para nele mesmo serem reempregados, não perdem o caráter de imóveis.
+III - Coisas fungíveis são aquelas que podem ser identificadas substituídas por outras de mesmo gênero, qualidade e sua quantidade.
+IV - Os frutos percebidos de má-fé não acarretam aquele que os percebeu direito de retê-los, obrigando ainda uma indenização para o credor.
+V - As benfeitorias voluptuárias não são indenizáveis.`,
+            options: {
+              A: 'V, V, F, F, V.',
+              B: 'F, F, F, F, V.',
+              C: 'V, V, V, V, V.',
+              D: 'F, V, V, V, V.',
+              E: 'F, V, V, F, F.'
+            }
+          },
+          {
+            num: 4,
+            answer: 'C',
+            stem: `No tocante à classificação de bens, segundo o Código Civil brasileiro, considere as seguintes benfeitorias realizadas em um apartamento tipo cobertura com trinta anos de construção visando a habitação de um casal de meia idade, sem filhos:
+I. Impermeabilização do terraço com a aplicação de manta e colocação de pisos novos.
+II. Substituição da fiação elétrica do apartamento.
+III. Colocação de tela nas varandas.
+IV. Criação de painel de pastilhas azuis com mosaico na entrada do apartamento visando diferenciá-la do apartamento vizinho.
+V. Construção de um lavabo em parte da sala de almoço.
+Com relação aos bens reciprocamente considerados, são benfeitorias úteis as indicadas APENAS em:`,
+            options: {
+              A: 'I, II, III.',
+              B: 'I, II, III, IV.',
+              C: 'III e V.',
+              D: 'I, III e V.',
+              E: 'IV e V.'
+            }
+          },
+          {
+            num: 5,
+            answer: 'B',
+            stem: `Sobre a sucessão é impossível afirmar que:`,
+            options: {
+              A: 'Dez anos depois de passada em julgado a sentença que concede a abertura da sucessão provisória, poderão os interessados requerer a sucessão definitiva e o levantamento das cauções prestadas.',
+              B: 'Pode-se requerer a sucessão definitiva, também, provando-se que o ausente conta sessenta anos de idade, e que de cinco datam as últimas notícias dele.',
+              C: 'Decorrido um ano da arrecadação dos bens do ausente, ou, se ele deixou representante ou procurador, em se passando três anos, poderão os interessados requerer que se declare a ausência e se abra provisoriamente a sucessão.',
+              D: 'Empossados nos bens, os sucessores provisórios ficarão representando ativa e passivamente o ausente, de modo que contra eles correrão as ações pendentes e as que de futuro àquele forem movidas.',
+              E: 'Se o ausente aparecer, ou se lhe provar a existência, depois de estabelecida a posse provisória, cessarão para logo as vantagens dos sucessores nela imitidos, ficando, todavia, obrigados a tomar as medidas assecuratórias precisas, até a entrega dos bens a seu dono.'
+            }
+          },
+          {
+            num: 6,
+            answer: 'C',
+            stem: `Joaquim é agente diplomático do Brasil e foi citado no estrangeiro. Ele alega extraterritorialidade sem designar onde tem o seu domicílio no Brasil. A respeito do assunto, considere as seguintes afirmativas:
+1. Joaquim poderá ser demandado no último ponto do território brasileiro onde teve domicílio.
+2. Joaquim poderá ser demandado no local onde está lotado no estrangeiro.
+3. Joaquim poderá ser demandado no Distrito Federal.
+4. Joaquim poderá ser demandado no último ponto mais próximo do Brasil, onde prestou serviço diplomático.
+Assinale a alternativa CORRETA.`,
+            options: {
+              A: 'Somente as afirmativas 1, 2 e 3 são verdadeiras.',
+              B: 'Somente a afirmativa 4 é verdadeira.',
+              C: 'Somente as afirmativas 1 e 3 são verdadeiras.',
+              D: 'Somente as afirmativas 2, 3 e 4 são verdadeiras.',
+              E: 'Somente as afirmativas 1 e 2 são verdadeiras.'
+            }
+          },
+          {
+            num: 7,
+            answer: 'E',
+            stem: `Leia o texto com atenção:
+Egídio descobre que sua esposa Joana está com um câncer. Ao iniciar o tratamento, o plano de saúde de Joana se recusa a cobrir as despesas, em razão da doença ser preexistente à contratação. Em razão disso, o casal coloca à venda um imóvel de propriedade do casal com valor de mercado de R$ 1.000.000,00 (um milhão de reais) por R$ 150.000,00 (cento e cinquenta mil reais), visando obter, de forma rápida, valores necessários para o pagamento do tratamento de saúde de Joana. Raimundo, tomando ciência da oferta da venda do imóvel de Egídio e Joana, não tendo qualquer intenção de auferir um ganho exagerado na compra e nem causar prejuízo aos vendedores, apenas aproveitando o que considera um excelente negócio, compra o imóvel em 01.01.2015. Em 02.01.2018, Egídio e Joana ajuízam uma ação judicial contra Raimundo, na qual questionam a validade do negócio jurídico. Assinale a alternativa CORRETA.`,
+            options: {
+              A: 'O negócio jurídico é válido e eficaz. Não há qualquer norma que impeça um vendedor, por livre e espontânea vontade, de alienar um bem por valores abaixo dos praticados no mercado, em razão do princípio da autonomia da vontade que prevalece, principalmente no presente caso, onde não se verifica que uma das partes seja hipossuficiente em relação à outra.',
+              B: 'O negócio jurídico é anulável. Em razão da doença de Joana, o casal estava numa situação que os levou à conclusão de um negócio jurídico eivado pelo vício da lesão que poderia ser decretada para restituir as partes à situação anterior, mas que não poderá ser realizada em razão do decurso do prazo decadencial de 3 (três) anos.',
+              C: 'O negócio jurídico é nulo de pleno direito por ilicitude do objeto. Não existe uma contraprestação válida, tendo em vista o valor da prestação, comparada ao preço real do bem adquirido, bem como pela ausência de vontade válida, podendo a nulidade ser declarada a qualquer tempo.',
+              D: 'O negócio jurídico é anulável. Em razão da doença de Joana, o casal estava numa situação que os levou à conclusão de um negócio jurídico eivado pelo vício do estado de perigo que, entretanto, não pode ser reconhecido em razão do decurso do prazo decadencial de 2 (dois) anos.',
+              E: 'O negócio jurídico é anulável. Em razão da doença de Joana, o casal estava numa situação que os levou à conclusão de um negócio jurídico eivado pelo vício da lesão que pode ser desconstituído; caso Raimundo concorde em suplementar o valor anteriormente pago, o negócio pode ser mantido.'
+            }
+          },
+          {
+            num: 8,
+            answer: 'B',
+            stem: `Carlos, advogado, desempregado, residente em Joinville, estuda há algum tempo para o concurso de juiz leigo indenizado do estado de Santa Catarina. A caminho do local onde seria realizada a prova, o carro de Carlos para de funcionar. Desesperado com a possibilidade de perder a prova, Carlos pede a um taxista que estava passando para levá-lo ao local do exame. O taxista aceita a corrida e decide cobrar R$ 500,00 (quinhentos reais) para percorrer os quatro quilômetros até o local onde seria realizado o exame. Carlos, sem vislumbrar outra alternativa, aceita o valor da corrida. Diante do caso hipotético apresentado, assinale a alternativa que corresponde ao defeito do negócio jurídico narrado.`,
+            options: {
+              A: 'Simulação.',
+              B: 'Lesão.',
+              C: 'Dolo.',
+              D: 'Estado de perigo.',
+              E: 'Coação.'
+            }
+          },
+          {
+            num: 9,
+            answer: 'A',
+            stem: `Júnior adquiriu, de boa-fé, um veículo seminovo de Leandro. Sabendo que o negócio jurídico não se concretizaria caso Júnior soubesse que o veículo já se envolvera em acidentes de trânsito por três vezes, Leandro mentiu ao garantir a Júnior que o veículo jamais se envolvera em qualquer acidente. De acordo com o Código Civil, o defeito do negócio jurídico apresentado nessa situação hipotética corresponde a:`,
+            options: {
+              A: 'Dolo.',
+              B: 'Lesão.',
+              C: 'Fraude contra credores.',
+              D: 'Erro.',
+              E: 'Coação.'
+            }
+          },
+          {
+            num: 10,
+            answer: 'A',
+            stem: `Amâncio deve quantia em dinheiro para Patrícia. Como Amâncio não quita a dívida no prazo estipulado, Patrícia ameaça de morte o seu filho. Diante disso, Amâncio transfere para Patrícia a propriedade de seu automóvel. Levando em consideração os dados apresentados, a transferência do automóvel é anulável pelo vício:`,
+            options: {
+              A: 'Da coação.',
+              B: 'Da lesão.',
+              C: 'Do dolo.',
+              D: 'Da simulação.',
+              E: 'Do erro.'
+            }
+          },
+          {
+            num: 11,
+            answer: 'A',
+            stem: `Assinale a correspondência CORRETA:
+I - Lesão.
+II - Onerosidade Excessiva.
+III - Dolo.
+IV - Estado de Perigo.
+V - Simulação.
+
+( ) Dolo.... No Direito penal, o dolo é a intenção de praticar um ato que se sabe contrário à lei, portanto, diz-se doloso o crime quando o agente quis o resultado ou assumiu o risco de produzi-lo. No Direito Civil, dolo é todo artifício usado para enganar e/ou induzir alguém.
+( ) É o acordo simulatório que possibilita o surgimento do negócio simulado, mediante a estipulação pelas partes de um objetivo dissimulado. Acordo simulatório é o meio convencionado pelas partes para obterem aquilo que se dissimulou.
+( ) Ocorre a lesão quando uma pessoa, sob premente necessidade, ou por inexperiência, se obriga a prestação manifestamente desproporcional ao valor da prestação oposta. Art 157
+( ) Configura-se o estado de perigo quando alguém, premido da necessidade de salvar-se, ou a pessoa de sua família, de grave dano conhecido pela outra parte, assume obrigação excessivamente onerosa. Tratando-se de pessoa não pertencente à família do declarante, o juiz decidirá segundo as circunstâncias. Art 156
+( ) O estado de perigo, é uma das modalidades de defeito no negócio jurídico, guarda características semelhantes ao estado de necessidade, que é uma causa de exclusão de ilicitude no Direito Penal. Configura-se estado de perigo quando alguém, assume obrigação excessivamente onerosa.`,
+            options: {
+              A: 'III, V, I, IV, II.',
+              B: 'I, II, IV, III, V.',
+              C: 'I, II, III, IV, V.',
+              D: 'V, II, III, IV, I.',
+              E: 'V, II, III, IV, I.'
+            }
+          },
+          {
+            num: 12,
+            answer: 'B',
+            stem: `Relativamente às pessoas jurídicas, julgue os itens a seguir:
+I - As pessoas jurídicas são de direito público, interno ou externo, e de direito privado.
+II - As pessoas jurídicas de direito público externo são civilmente responsáveis por atos dos seus agentes que nessa qualidade causem danos a terceiros, ressalvado direito regressivo contra os causadores do dano, se houver, por parte destes, culpa ou dolo.
+III - Os partidos políticos são pessoas jurídicas de direito privado.
+Está CORRETO o que se afirma em:`,
+            options: {
+              A: 'I, II e III.',
+              B: 'I e III.',
+              C: 'I e II.',
+              D: 'II e III.',
+              E: 'Somente a III.'
+            }
+          },
+          {
+            num: 13,
+            answer: 'A',
+            stem: `Com relação a conceitos, formação, extinção e aspectos relacionados à pessoa jurídica, é CORRETO afirmar que:`,
+            options: {
+              A: 'Os condomínios edilícios são exemplos de pessoa formal que, embora não caracterize pessoa jurídica, tem sido reconhecida como sujeito de direito.',
+              B: 'Constituem-se, sem o registro competente, as pessoas jurídicas de fato, cujos sócios respondem pessoal e limitadamente pelas obrigações assumidas, não se afastando a aplicação do princípio da autonomia patrimonial.',
+              C: 'O registro competente é ato necessário para constituir as pessoas jurídicas de direito tanto privado quanto público.',
+              D: 'A aplicação da teoria da desconsideração da personalidade jurídica implica a desconstituição do registro da pessoa jurídica, ou seja, a sua despersonalização.',
+              E: 'A teoria da aparência e a teoria ultra vires se confundem: por meio delas, a pessoa jurídica se obriga por atos praticados por seus sócios administradores, mesmo que exercidos fora dos limites de ação determinados no ato constitutivo da empresa.'
+            }
+          },
+          {
+            num: 14,
+            answer: 'E',
+            stem: `São benfeitorias úteis:`,
+            options: {
+              A: 'Somente aquelas que, sem aumentar o uso habitual, tornem mais agradável o bem.',
+              B: 'As indispensáveis à conservação do bem.',
+              C: 'As de deleite ou recreio, embora não aumentem o uso habitual.',
+              D: 'As que têm por fim conservar o bem ou evitar que se deteriore.',
+              E: 'As que aumentam ou facilitam o uso do bem.'
+            }
+          },
+          {
+            num: 15,
+            answer: 'A',
+            stem: `Os bens naturalmente divisíveis podem tornar-se indivisíveis:`,
+            options: {
+              A: 'Por vontade das partes, não podendo exceder de cinco anos a indivisão estabelecida pelo doador ou pelo testador.',
+              B: 'Por vontade das partes, que não poderão acordá-la por prazo maior de cinco anos, insuscetível de prorrogação ulterior.',
+              C: 'Apenas pela vontade das partes.',
+              D: 'Apenas por disposição expressa de lei.',
+              E: 'Por disposição expressa de lei ou pela vontade das partes, desde que, neste caso, o prazo de obrigatoriedade da indivisão não ultrapasse dez anos.'
+            }
+          },
+          {
+            num: 16,
+            answer: 'C',
+            stem: `A respeito da classificação dos bens, é CORRETO afirmar que:`,
+            options: {
+              A: 'São fungíveis os bens móveis ou imóveis que possam ser substituídos por outros da mesma espécie, qualidade e quantidade.',
+              B: 'A lei, ao tratar dos bens reciprocamente considerados, determina que os seus frutos e produtos possam ser objeto de negócio jurídico desde que separados do bem principal.',
+              C: 'A aquisição de bens móveis se dá por simples tradição, enquanto a de bens imóveis exige escritura pública e registro em cartório, com exceção daqueles cujo valor atinja até trinta vezes o maior salário mínimo do país.',
+              D: 'Os bens podem ser divididos em consumíveis e não consumíveis; contudo, esses últimos, quando sofrem deteriorações devido ao uso, passam a ser incluídos no conceito de bens consumíveis.',
+              E: 'Os bens naturalmente divisíveis podem tornar-se indivisíveis apenas por determinação legal, não se admitindo, assim, que um negócio jurídico estabeleça a indivisibilidade da coisa.'
+            }
+          },
+          {
+            num: 17,
+            answer: 'D',
+            stem: `O direito civil brasileiro dispõe sobre as associações, considerando-as como:`,
+            options: {
+              A: 'N.d.a.',
+              B: 'Sujeitos personificados de direito público ou privado, sem fins econômicos, nas quais surgem relações jurídico-obrigacionais entre seus membros.',
+              C: 'Sujeitos não personificados de direito privado, com fins econômicos, nas quais surgem relações obrigacionais com a comunidade.',
+              D: 'Sujeitos personificados de direito público ou privado sem fins econômicos, nas quais não há vínculos obrigacionais entre associados.',
+              E: 'Sujeitos não personificados de direito público, sem fins econômicos, nas quais há vínculos obrigacionais com a comunidade.'
+            }
+          },
+          {
+            num: 18,
+            answer: 'B',
+            stem: `Acerca das disposições do Domicílio previstas no Código Civil, assinale a alternativa INCORRETA.`,
+            options: {
+              A: 'É também domicílio da pessoa natural, quanto às relações concernentes à profissão, o lugar onde esta é exercida.',
+              B: 'Nos contratos escritos, é vedado aos contratantes especificar domicílio onde se exercitem e cumpram os direitos e obrigações deles resultantes.',
+              C: 'Ter-se-á por domicílio da pessoa natural, que não tenha residência habitual, o lugar onde for encontrada.',
+              D: 'Têm domicílio necessário o incapaz, o servidor público, o militar, o marítimo e o preso.',
+              E: 'O domicílio da pessoa natural é o lugar onde ela estabelece a sua residência com ânimo definitivo.'
+            }
+          },
+          {
+            num: 19,
+            answer: 'A',
+            stem: `Tratando do regime jurídico do domínio público, a professora Maria Sylvia Zanella di Pietro assevera que "embora a classificação adotada pelo Código Civil abranja três modalidades de bens, quanto ao regime jurídico existem apenas duas" (PIETRO, 2018). Levando em consideração o exposto, assinale a alternativa CORRETA.`,
+            options: {
+              A: 'Os bens patrimoniais disponíveis possuem um regime que lhes é peculiar e que se diferencia do das duas outras modalidades.',
+              B: 'São bens públicos, segundo a redação do Código Civil brasileiro, os bens patrimoniais disponíveis, os bens patrimoniais indisponíveis e os bens não patrimoniais.',
+              C: 'Os bens não patrimoniais equivalem aos bens de uso especial.',
+              D: 'A presença da afetação tipicamente incidente nos bens dominicais é um elemento que os diferencia face aos bens patrimoniais indisponíveis.',
+              E: 'Os bens de uso especial e de uso comum do povo possuem regime jurídico distinto, considerando a sua discrepante finalidade em relação ao interesse público.'
+            }
+          },
+          {
+            num: 20,
+            answer: 'C',
+            stem: `Com base nas disposições do Código Civil referentes a pessoas jurídicas, assinale a opção CORRETA.`,
+            options: {
+              A: 'As fundações são pessoas jurídicas de direito privado cuja criação é livre e independe de registro.',
+              B: 'As organizações religiosas são pessoas jurídicas de direito público cuja criação é condicionada ao reconhecimento de sua existência pelo poder público.',
+              C: 'As associações são pessoas jurídicas de direito privado cuja existência legal depende de inscrição do ato constitutivo no respectivo registro.',
+              D: 'As sociedades são pessoas jurídicas de direito privado criadas por meio de lei.',
+              E: 'Os partidos políticos são pessoas jurídicas de direito público criadas por meio de lei.'
+            }
+          },
+          {
+            num: 21,
+            answer: 'E',
+            stem: `Sobre a nulidade e a anulação não podemos asseverar que:`,
+            options: {
+              A: 'A invalidade mais grave é a chamada nulidade, o ato é nulo. Se a invalidade é menos grave, o ato é anulável. O ato nulo já é nulo de pleno direito, e o ato anulável está esperando alguém pedir pra anular. Se as partes não requererem no prazo que a lei dá o ato anulável convalesce.',
+              B: 'Plano da Validade: agente capaz e legitimado; objeto lícito, possível e determinado ou determinável; manifestação de vontade livre; forma prescrita ou não defesa em lei.',
+              C: 'Plano da Existência: agente; manifestação de vontade; objeto; forma dessa manifestação.',
+              D: 'Pelo Princípio da conservação dos contratos, "respeitada a intenção das partes, a invalidade parcial de um negócio jurídico não o prejudicará na parte válida, se esta for separável; a invalidade da obrigação principal implica a das obrigações acessórias, mas a destas não induz a da obrigação principal". A aplicabilidade dessa norma se dá tanto às hipóteses de nulidade como às de anulabilidade, preservando, se possível for, parte do negócio jurídico que não esteja contaminado pela invalidade.',
+              E: 'Plano da existência: condição (evento futuro e incerto); termo (evento futuro e certo); encargo ou modo. São os ditos elementos acidentais, porque podem ou não fazer parte do negócio jurídico.'
+            }
+          },
+          {
+            num: 22,
+            answer: 'C',
+            stem: `Considere:
+I. São bens públicos de uso especial do povo os rios, mares, estradas, ruas e praças.
+II. O uso comum dos bens públicos pode ser oneroso, conforme estabelecido legalmente pela entidade a cuja administração pertencerem.
+III. Ao Ministério Público cabe, em regra, elaborar o estatuto das fundações.
+Está correto o que se afirma em:`,
+            options: {
+              A: 'I e II, apenas.',
+              B: 'II e III, apenas.',
+              C: '..I e II, apenas. II e III, apenas. I, II e III.',
+              D: 'I, apenas.',
+              E: 'II, apenas.'
+            }
+          },
+          {
+            num: 23,
+            answer: 'C',
+            stem: `Coisas e bens classificam-se segundo vários critérios. Qual alternativa apresenta considerações CORRETAS sobre os bens de "segunda classe"?`,
+            options: {
+              A: 'Podem ser corpóreos ou incorpóreos. Corpóreos, materiais ou tangíveis são os bens possuidores de existência física, como uma mesa, um carro, um alfinete ou um grande navio.',
+              B: 'Podem ser fungíveis ou infungíveis. Infungíveis são bens que possam ser substituídos por outro da mesma espécie, qualidade e quantidade, como os alimentos em geral.',
+              C: 'Podem ser principais ou acessórios. Os acessórios podem ser imobiliários ou mobiliários, enquanto que os principais são os bens que existem por si mesmos, abstrata ou concretamente.',
+              D: 'Podem ser móveis, semoventes ou imóveis, no qual os primeiros são bens suscetíveis de movimento próprio, ou de remoção por força alheia, sem que tal movimento ou remoção altere sua essência.',
+              E: 'Podem ser consumíveis ou inconsumíveis, no qual os primeiros são os bens móveis cujo uso importe a destruição de sua substância, ou seja, que desapareçam com o consumo.'
+            }
+          },
+          {
+            num: 24,
+            answer: 'A',
+            stem: `Sobre a Validade e Invalidade das relações jurídicas é impossível afirmar que:`,
+            options: {
+              A: 'N.d.a.',
+              B: 'Invalidade é uma expressão utilizada para designar o negócio que não produz as consequências desejadas pelas partes. É gênero do qual decorrem duas espécies: 1º - nulidade (negócio jurídico nulo); 2º - anulabilidade (negócio jurídico anulável).',
+              C: 'Negócio Jurídico ineficaz é o ato válido e que produz efeitos, só que apenas entre as partes. Não produz efeitos perante terceiros. Quando o ato não produz efeitos em relação a certa pessoa, diz-se que a ineficácia é relativa; quando não produz efeitos perante todas as outras pessoas, se diz que a ineficácia é absoluta.',
+              D: 'Quando o negócio jurídico é considerado nulo, deve ser proposta ação declaratória de nulidade. O negócio jurídico nulo não convalesce pelo decurso do tempo. Não se tem dúvidas de que referido dispositivo consagrou a imprescritibilidade do negócio jurídico nulo, mas na doutrina podemos encontrar outras correntes.',
+              E: 'Na anulação, a sentença é constitutiva negativa e tem efeitos "ex nunc".'
+            }
+          },
+          {
+            num: 25,
+            answer: 'C',
+            stem: `Sobre os bens é INCORRETO afirmar que:
+I - Fungíveis
+II - Singulares
+III - Benfeitorias
+IV - Frutos
+V - Produtos
+
+( ) São bens móveis que podem ser substituídos por outros da mesma espécie, qualidade e quantidade, ou seja, podem ser determinados por peso, número ou medida.
+( ) São utilidades que a coisa principal produz periodicamente, cuja colheita não diminui o valor nem a substância da fonte. Eles nascem e renascem periodicamente da coisa. Possuem três requisitos: a periodicidade; inalterabilidade da substância do bem principal; e possibilidade de separação desta.
+( ) São bens que, embora reunidos, são considerados distintos, isolados uns dos outros. São considerados em sua individualidade, como, por exemplo, um caderno.
+( ) São acessórios incorporados ao bem principal pelo homem, visando conservar, melhorar ou embelezar algo.
+( ) São as utilidades que a coisa produz, porém não periodicamente, diminuindo-lhe a quantidade e alterando sua substância até que ele se esgote, como, por exemplo, a extração de carvão em uma mina.`,
+            options: {
+              A: 'II, IV, III, V, I.',
+              B: 'IV, V, III, II, I.',
+              C: 'I, IV, II, III, V.',
+              D: 'I, V, III, V, IV.',
+              E: 'III, IV, V, II, I.'
+            }
+          },
+          {
+            num: 26,
+            answer: 'B',
+            stem: `De acordo com o Código Civil, terreno destinado ao estabelecimento de uma autarquia em determinado estado federado é um bem público:`,
+            options: {
+              A: 'De uso comum, que é inalienável enquanto conservar sua qualificação.',
+              B: 'De uso especial, que é inalienável enquanto conservar sua qualificação.',
+              C: 'Dominical, que é alienável desde que observada a forma como a lei determinar que ocorra esse ato.',
+              D: 'De uso restrito, que é inalienável enquanto conservar sua qualificação.',
+              E: 'Singular, que é alienável desde que observada a forma como a lei determinar que ocorra esse ato.'
+            }
+          },
+          {
+            num: 27,
+            answer: 'B',
+            stem: `As associações constituem-se pela união de pessoas que se organizem para fins não econômicos. A respeito das associações, responda:
+I. Se o associado for titular de quota ou fração ideal do patrimônio da associação, a transferência daquela importará, de per si, na atribuição da qualidade de associado ao adquirente ou ao herdeiro, salvo disposição diversa do estatuto.
+II. Dissolvida a associação, o remanescente do seu patrimônio líquido será destinado à entidade de fins não econômicos designada no estatuto, ou, omisso este, por deliberação dos associados, à instituição municipal, estadual ou federal, de fins idênticos ou semelhantes, depois de deduzidas, se for o caso, as quotas ou frações ideais de titularidade de associados.
+III. Por cláusula do estatuto ou, no seu silêncio, por deliberação dos associados, podem estes, antes da destinação do remanescente à entidade de fins não econômicos, receber em restituição, atualizado o respectivo valor, as contribuições que tiverem prestado ao patrimônio da associação.
+Assinale a CORRETA:`,
+            options: {
+              A: 'Todas as assertivas são falsas.',
+              B: 'Todas as assertivas são verdadeiras.',
+              C: 'Apenas a assertiva III é verdadeira.',
+              D: 'Apenas as assertivas II e III são verdadeiras.',
+              E: 'N.d.a.'
+            }
+          },
+          {
+            num: 28,
+            answer: 'B',
+            stem: `Sobre a teoria geral do direito civil é INCORRETO afirmar que:`,
+            options: {
+              A: 'Dez anos depois de passada em julgado a sentença que concede a abertura da sucessão provisória, poderão os interessados requerer a sucessão definitiva e o levantamento das cauções prestadas;',
+              B: 'Decorrido um três da arrecadação dos bens do ausente, ou, se ele deixou representante ou procurador, em se passando um ano, poderão os interessados requerer que se declare a ausência e se abra provisoriamente a sucessão.',
+              C: 'Regressando o ausente nos dez anos seguintes à abertura da sucessão definitiva, ou algum de seus descendentes ou ascendentes, aquele ou estes haverão só os bens existentes no estado em que se acharem, os sub-rogados em seu lugar, ou o preço que os herdeiros e demais interessados houverem recebido pelos bens alienados depois daquele tempo;',
+              D: 'Decorrido um ano da arrecadação dos bens do ausente, ou, se ele deixou representante ou procurador, em se passando três anos, poderão os interessados requerer que se declare a ausência e se abra provisoriamente a sucessão;',
+              E: 'Desaparecendo uma pessoa do seu domicílio sem dela haver notícia, se não houver deixado representante ou procurador a quem caiba administrar-lhe os bens, o juiz, a requerimento de qualquer interessado ou do Ministério Público, declarará a ausência, e nomear-lhe-á curador;'
+            }
+          },
+          {
+            num: 29,
+            answer: 'B',
+            stem: `Sobre a teoria geral do direito civil é INCORRETO afirmar que:`,
+            options: {
+              A: 'As pessoas jurídicas de direito público interno são civilmente responsáveis por atos dos seus agentes que nessa qualidade causem danos a terceiros, ressalvado direito regressivo contra os causadores do dano, se houver, por parte destes, culpa ou dolo.',
+              B: 'Todas as afirmações são incorretas.',
+              C: 'As pessoas jurídicas são de direito público, interno ou externo, e de direito privado. São pessoas jurídicas de direito público interno: União; os Estados, o Distrito Federal e os Territórios; os Municípios; as autarquias, inclusive as associações públicas e as demais entidades de caráter público criadas por lei.',
+              D: 'Em caso de abuso da personalidade jurídica, caracterizado pelo desvio de finalidade, ou pela confusão patrimonial, pode o juiz decidir, a requerimento da parte, ou do Ministério Público quando lhe couber intervir no processo, que os efeitos de certas e determinadas relações de obrigações sejam estendidos aos bens particulares dos administradores ou sócios da pessoa jurídica.',
+              E: 'São pessoas jurídicas de direito privado: as associações; as sociedades; as fundações, as organizações religiosas; os partidos políticos.'
+            }
+          },
+          {
+            num: 30,
+            answer: 'A',
+            stem: `Sobre a teoria geral do direito civil que trata dos direitos de personalidade é INCORRETO afirmar que:`,
+            options: {
+              A: 'Em se tratando de morto ou de ausente, são partes legítimas para requerer essa proteção o cônjuge e somente os ascendentes.',
+              B: 'É válida, com objetivo científico, ou altruístico, a disposição gratuita do próprio corpo, no todo ou em parte, para depois da morte.',
+              C: 'Com exceção dos casos previstos em lei, os direitos da personalidade são intransmissíveis e irrenunciáveis, não podendo o seu exercício sofrer limitação voluntária.',
+              D: 'Toda pessoa tem direito ao nome, nele compreendidos o prenome e o sobrenome.',
+              E: 'Salvo por exigência médica, é defeso o ato de disposição do próprio corpo, quando importar diminuição permanente da integridade física, ou contrariar os bons costumes.'
+            }
+          },
+          {
+            num: 31,
+            answer: 'D',
+            stem: `Sobre a teoria geral do direito civil que trata sobre a ausência é INCORRETO afirmar que:`,
+            options: {
+              A: 'Regressando o ausente nos dez anos seguintes à abertura da sucessão definitiva, ou algum de seus descendentes ou ascendentes, aquele ou estes haverão só os bens existentes no estado em que se acharem, os sub-rogados em seu lugar, ou o preço que os herdeiros e demais interessados houverem recebido pelos bens alienados depois daquele tempo;',
+              B: 'Decorrido um ano da arrecadação dos bens do ausente, ou, se ele deixou representante ou procurador, em se passando três anos, poderão os interessados requerer que se declare a ausência e se abra provisoriamente a sucessão;',
+              C: 'Desaparecendo uma pessoa do seu domicílio sem dela haver notícia, se não houver deixado representante ou procurador a quem caiba administrar-lhe os bens, o juiz, a requerimento de qualquer interessado ou do Ministério Público, declarará a ausência, e nomear-lhe-á curador;',
+              D: 'Decorrido um três da arrecadação dos bens do ausente, ou, se ele deixou representante ou procurador, em se passando um ano, poderão os interessados requerer que se declare a ausência e se abra provisoriamente a sucessão.',
+              E: 'Dez anos depois de passada em julgado a sentença que concede a abertura da sucessão provisória, poderão os interessados requerer a sucessão definitiva e o levantamento das cauções prestadas;'
+            }
+          },
+          {
+            num: 32,
+            answer: 'D',
+            stem: `Julgue os itens abaixo, e marque a alternativa CORRETA:
+I - As fundações podem ser particulares e públicas.
+II - Para criar uma fundação privada, o seu instituidor fará, por escritura pública, contrato registrado, ou testamento.
+III - Uma fundação de direito privado tem como fins específicos apenas: religiosos, morais, culturais ou de assistência.
+IV - As associações constituem-se numa união de pessoas organizadas para fins econômicos ou não econômicos.
+V - Os partidos políticos são pessoas jurídicas de direito público.`,
+            options: {
+              A: 'Somente os itens I e III estão corretos.',
+              B: 'Somente os itens I, III e IV estão corretos.',
+              C: 'Somente os itens I, II, III e IV estão corretos.',
+              D: 'Somente o item I está correto.',
+              E: 'Todos os itens estão corretos.'
+            }
+          }
+        ]
+      },
+      {
+        id: 'constitucional',
+        title: 'Direito Constitucional I',
+        shortTitle: 'Constitucional I',
+        color: 'teal',
+        icon: 'landmark',
+        notice: null,
+        questions: [
+          {
+            num: 1,
+            answer: 'D',
+            stem: `A SUPREMACIA CONSTITUCIONAL É DIVIDIDA EM:`,
+            options: {
+              A: 'Fechada e formal.',
+              B: 'Material e rígida.',
+              C: 'Rígida e aberta.',
+              D: 'Material e formal.',
+              E: 'Aberta e fechada.'
+            }
+          },
+          {
+            num: 2,
+            answer: 'B',
+            stem: `A REPÚBLICA FEDERATIVA DO BRASIL REGE-SE NAS SUAS RELAÇÕES INTERNACIONAIS PELOS SEGUINTES PRINCÍPIOS:
+I - INDEPENDÊNCIA NACIONAL;
+II - PREVALÊNCIA DOS DIREITOS HUMANOS;
+III - AUTODETERMINAÇÃO DOS POVOS;
+IV - NÃO-INTERVENÇÃO;
+V - IGUALDADE ENTRE OS ESTADOS;
+VI - DEFESA DA PAZ;
+VII - SOLUÇÃO PACÍFICA DOS CONFLITOS;
+VIII - REPÚDIO AO TERRORISMO E AO RACISMO;
+IX - COOPERAÇÃO ENTRE OS POVOS PARA O PROGRESSO DA HUMANIDADE;
+X - CONCESSÃO DE ASILO POLÍTICO.
+ASSINALE A ALTERNATIVA CORRETA:`,
+            options: {
+              A: 'Apenas as alternativas II, III, V, VII, X estão corretas.',
+              B: 'Todas as alternativas estão corretas.',
+              C: 'Apenas as alternativas I, II, III, IV, V, IX estão corretas.',
+              D: 'Apenas as alternativas I, II, III, V, VII estão corretas.',
+              E: 'Apenas as alternativas I, II, III estão corretas.'
+            }
+          },
+          {
+            num: 3,
+            answer: 'C',
+            stem: `O PODER CONSTITUINTE DERIVADO REFORMADOR TEM POR PRINCIPAIS CARACTERÍSTICAS SER:`,
+            options: {
+              A: 'Formal, rígido e limitado.',
+              B: 'Ilimitado, subordinado e material.',
+              C: 'Subordinado, limitado e condicionado.',
+              D: 'Material, condicionado e decorrente.',
+              E: 'Inaugural, ilimitado e incondicionado.'
+            }
+          },
+          {
+            num: 4,
+            answer: 'B',
+            stem: `NOS ESTADOS, O PODER LEGISLATIVO É REPRESENTADO E EXERCIDO POR:`,
+            options: {
+              A: 'Câmara dos deputados.',
+              B: 'Assembleia Legislativa.',
+              C: 'Governador.',
+              D: 'Vereadores.',
+              E: 'Prefeito.'
+            }
+          },
+          {
+            num: 5,
+            answer: 'E',
+            stem: `NO BRASIL, A FORMA REPUBLICANA E O SISTEMA PRESIDENCIALISTA DE GOVERNO SÃO MARCADOS PELA TEMPORALIDADE E ELETIVIDADE DO CARGO DE CHEFE DO EXECUTIVO. QUEM É O CHEFE DO PODER EXECUTIVO NACIONAL?`,
+            options: {
+              A: 'Primeiro Ministro.',
+              B: 'Prefeito.',
+              C: 'Senador.',
+              D: 'Governador.',
+              E: 'Presidente da República.'
+            }
+          },
+          {
+            num: 6,
+            answer: 'B',
+            stem: `NO BRASIL TEMOS AS SEGUINTES ESPÉCIES DE CONTROLE CONCENTRADO DE CONSTITUCIONALIDADE CONTEMPLADAS PELA CARTA POLÍTICA DE 1988:`,
+            options: {
+              A: 'ADI ou ADIN, ADIN Interventiva, ADIN por Omissão, ADIN declaratória, ADIN material.',
+              B: 'ADI ou ADIN, ADIN Interventiva, ADIN por Omissão, ADECON ou ADC e ADPF.',
+              C: 'ADI ou ADIN, ADIN Interventiva, ADIN por Omissão.',
+              D: 'ADI ou ADIN, ADECON ou ADC e ADPF.',
+              E: 'ADI ou ADIN, ADECON formal, e ADPF declaratória.'
+            }
+          },
+          {
+            num: 7,
+            answer: 'E',
+            stem: `SEGUNDO O ART. 205 DA CONSTITUIÇÃO, EDUCAÇÃO, DIREITO DE TODOS E DEVER DO ESTADO E DA FAMÍLIA, A PAR DE NORMAS INTERNAS QUE COMPLETAM O PENSAMENTO DO CONSTITUINTE DE 1988. ALÉM DA CONSTITUIÇÃO FEDERAL QUAL A PRINCIPAL LEI SOBRE EDUCAÇÃO NO BRASIL?`,
+            options: {
+              A: 'Lei do aprendizado (LA).',
+              B: 'Lei da Alfabetização (LA).',
+              C: 'Diretrizes da Educação (DE).',
+              D: 'Lei da Educação (LE).',
+              E: 'Lei de Diretrizes e Bases da Educação (LDB).'
+            }
+          },
+          {
+            num: 8,
+            answer: 'A',
+            stem: `SEGUNDO O ILUSTRE CONSTITUCIONALISTA JOSÉ AFONSO DA SILVA, AS NORMAS CONSTITUCIONAIS SÃO CLASSIFICADAS, QUANTO AO GRAU DE EFICÁCIA JURÍDICA E APLICABILIDADE, EM NORMAS CONSTITUCIONAIS DE:`,
+            options: {
+              A: 'Eficácia plena, de eficácia contida e eficácia limitada.',
+              B: 'Eficácia material, de eficácia formal e de eficácia rígida.',
+              C: 'Eficácia plena, de eficácia contida e de eficácia ilimitada.',
+              D: 'Eficácia moderada, de eficácia contida e de eficácia limitada.',
+              E: 'Eficácia plena, de eficácia restritiva e de eficácia limitada.'
+            }
+          },
+          {
+            num: 9,
+            answer: 'D',
+            stem: `SOBRE O PRINCÍPIO DA SUPREMACIA DA CONSTITUIÇÃO PODEMOS DIZER QUE:`,
+            options: {
+              A: 'A supremacia da Constituição é a teoria que dispõe sobre os direitos fundamentais.',
+              B: 'A supremacia da Constituição é uma teoria não utilizada no Brasil.',
+              C: 'A supremacia da Constituição é um conceito retrógrado e trata sobre a validade das Leis Infraconstitucionais.',
+              D: 'A supremacia da Constituição é pressuposto de todo o Direito Constitucional, e deve orientar fundamentalmente toda a interpretação do ordenamento jurídico constitucional e infraconstitucional.',
+              E: 'A supremacia da Constituição trata de direitos sociais.'
+            }
+          },
+          {
+            num: 10,
+            answer: 'E',
+            stem: `SÃO DIREITOS SOCIAIS DE ACORDO COM O DISPOSTO NO ARTIGO 6º DA CONSTITUIÇÃO FEDERAL:`,
+            options: {
+              A: 'A educação, a felicidade, a saúde, a alimentação, o trabalho, a moradia, o transporte, o lazer, a segurança, a previdência social, a proteção à maternidade e à infância, a assistência aos desamparados.',
+              B: 'A alfabetização, a saúde, a alimentação, o trabalho, a moradia, a previdência social, a proteção à maternidade e à infância, a assistência aos desamparados.',
+              C: 'A educação apenas o ensino fundamental, a saúde, a alimentação de qualidade, o trabalho, a moradia, o transporte, o lazer, a segurança, a previdência social, a proteção à maternidade e à infância, a assistência aos desamparados.',
+              D: 'A educação, exceto a saúde, a alimentação, o trabalho, a moradia, o transporte, o lazer, a segurança, a previdência social, a proteção à maternidade e à infância, a assistência aos desamparados.',
+              E: 'A educação, a saúde, a alimentação, o trabalho, a moradia, o transporte, o lazer, a segurança, a previdência social, a proteção à maternidade e à infância, a assistência aos desamparados.'
+            }
+          },
+          {
+            num: 11,
+            answer: 'E',
+            stem: `OS MUNICÍPIOS SE ORGANIZAM POR MEIO DA LEI ORGÂNICA MUNICIPAL. A ESTRUTURA DOS MUNICÍPIOS É A SEGUINTE:`,
+            options: {
+              A: 'Poder Legislativo, Poder Executivo, e Poder Judiciário.',
+              B: 'Poder Legislativo, Poder Judiciário, não existe poder Executivo no Município.',
+              C: 'Poder Executivo, Poder Judiciário, não existe poder Legislativo no Município.',
+              D: 'Poder Legislativo, Poder Executivo, e Poder coercitivo.',
+              E: 'Poder Legislativo, Poder Executivo, não existe judiciário no município.'
+            }
+          },
+          {
+            num: 12,
+            answer: 'E',
+            stem: `DE ACORDO COM A CONSTITUIÇÃO BRASILEIRA EM VIGÊNCIA, SÃO FUNDAMENTOS DA REPÚBLICA FEDERATIVA DO BRASIL, EXCETO:`,
+            options: {
+              A: 'Soberania.',
+              B: 'O pluralismo político.',
+              C: 'A dignidade da pessoa humana.',
+              D: 'Os valores sociais do trabalho e da livre iniciativa.',
+              E: 'A liberdade de manifestação do pensamento, sendo defesa a publicidade.'
+            }
+          },
+          {
+            num: 13,
+            answer: 'B',
+            stem: `CONSTITUIÇÃO FORMAL É CONSTITUÍDA POR ALGUNS ELEMENTOS, A SABER:`,
+            options: {
+              A: 'Material, limitativos, Socioideológicos, Elementos de estabilização constitucional, Formais de aplicabilidade.',
+              B: 'Orgânicos, Limitativos, Socioideológicos, Elementos de estabilização constitucional, Formais de aplicabilidade.',
+              C: 'Material, limitativos, Socioideológicos, Elementos de concretização constitucional.',
+              D: 'Orgânicos, Limitativos, Socioideológicos, Elementos de flexibilização da Constituição, Formais e materiais.',
+              E: 'Orgânicos, Limitativos, Sociais, Elementos de estabilização constitucional, Formais de aplicabilidade.'
+            }
+          },
+          {
+            num: 14,
+            answer: 'A',
+            stem: `SOBRE O PODER CONSTITUINTE DERIVADO REFORMADOR, PODE-SE DIZER QUE ESTA FORMA DE REFORMA ESTÁ SUBORDINADA A DIVERSAS LIMITAÇÕES MATERIAIS QUANTO AO SEU PROCEDIMENTO, DEVENDO SEGUIR DIVERSOS REQUISITOS PARA A SUA LEGITIMIDADE, SENDO ESTES:`,
+            options: {
+              A: 'Iniciativa, deliberação, promulgação.',
+              B: 'Delimitação, votação e inaugural.',
+              C: 'Material, iniciativa, inaugural.',
+              D: 'Formal, inicial, promulgação.',
+              E: 'Votação, iniciativa, de delimitação.'
+            }
+          },
+          {
+            num: 15,
+            answer: 'B',
+            stem: `ASSINALE, DENTRE AS OPÇÕES ABAIXO, AQUELA QUE INDICA UMA CARACTERÍSTICA INCORRETA DOS DIREITOS E GARANTIAS TIDOS COMO FUNDAMENTAIS PREVISTOS NA CONSTITUIÇÃO DA REPÚBLICA:`,
+            options: {
+              A: 'Irrenunciáveis.',
+              B: 'Absolutos.',
+              C: 'Cumuláveis ou concorrentes.',
+              D: 'Históricos.',
+              E: 'Inalienáveis.'
+            }
+          },
+          {
+            num: 16,
+            answer: 'C',
+            stem: `O PODER CONSTITUINTE DERIVADO REFORMADOR ESTÁ SUJEITO A LIMITES, ESTES QUE TRATAM TANTO DA MATÉRIA DO CONTEÚDO DA EMENDA, ATÉ OS PROCEDIMENTOS FORMAIS DA PROMULGAÇÃO. SÃO ESTES OS LIMITES:`,
+            options: {
+              A: 'Temporal, decorrente, inaugural.',
+              B: 'Inaugural, decorrente e formal.',
+              C: 'Material, circunstancial e temporal.',
+              D: 'Material, derivado e temporal.',
+              E: 'Formal, temporal, derivado.'
+            }
+          },
+          {
+            num: 17,
+            answer: 'D',
+            stem: `A EMENDA CONSTITUCIONAL 90, DE 15.9.2015, ACRESCENTOU, NO ROL DE DIREITOS SOCIAIS DO ART. 6º DA CONSTITUIÇÃO, O DIREITO AO TRANSPORTE. É PROVÁVEL QUE O CONSTITUINTE DERIVADO TENHA QUERIDO REFERIR-SE:`,
+            options: {
+              A: 'Transporte individual como carros e motos.',
+              B: 'Transporte exclusivamente urbano.',
+              C: 'Transporte por meio de trem, ônibus exceto metrô.',
+              D: 'Transporte coletivo urbano, incluindo trem, ônibus e metrô.',
+              E: 'Transporte coletivo urbano, exceto trem, ônibus e metrô.'
+            }
+          },
+          {
+            num: 18,
+            answer: 'B',
+            stem: `O DIREITO AO TRABALHO ESTÁ GARANTIDO PELA CONSTITUIÇÃO EM SEU ART. 6º, QUANDO SÃO ELENCADOS OS DIREITOS SOCIAIS, E OS ARTS. 7º A 11 CONTEMPLAM OS PRINCIPAIS DIREITOS PARA OS TRABALHADORES QUE DESENVOLVEM ATIVIDADES SOB A ÉGIDE DA LEGISLAÇÃO BRASILEIRA. ALÉM DA CONSTITUIÇÃO FEDERAL QUAL O PRINCIPAL REGRAMENTO JURÍDICO SOBRE O TRABALHO?`,
+            options: {
+              A: 'Lei do trabalho rural.',
+              B: 'Consolidação das Leis do Trabalho (CLT).',
+              C: 'Súmulas do TST.',
+              D: 'Lei de segurança do trabalho.',
+              E: 'Lei do trabalho doméstico.'
+            }
+          },
+          {
+            num: 19,
+            answer: 'D',
+            stem: `A NOSSA CONSTITUIÇÃO (CRFB/88), EM ESPECIAL O SEU ART. 37, ESTABELECE QUE A ADMINISTRAÇÃO PÚBLICA DIRETA E INDIRETA DE QUALQUER DOS PODERES DA UNIÃO, DOS ESTADOS, DO DISTRITO FEDERAL E DOS MUNICÍPIOS OBEDECERÁ AOS SEGUINTES PRINCÍPIOS:`,
+            options: {
+              A: 'Liberdade de Expressão, de Moradia, de Ir e Vir, ao Pagamento.',
+              B: 'Legalidade, Impessoalidade, Publicidade e Eficiência e Liberdade de Moradia.',
+              C: 'Legalidade, Pessoalidade, Moralidade, Publicidade e Eficiência.',
+              D: 'Legalidade, Impessoalidade, Moralidade, Publicidade e Eficiência.',
+              E: 'Legalidade, Impessoalidade, Moralidade, Publicidade e Paciência.'
+            }
+          },
+          {
+            num: 20,
+            answer: 'C',
+            stem: `SÃO CARACTERÍSTICAS DO FEDERALISMO:`,
+            options: {
+              A: 'Descentralização do Poder Político, autogoverno, autoadministração.',
+              B: 'Descentralização do Poder Político.',
+              C: 'Descentralização do Poder Político, poder de autodeterminação, autogoverno, autoadministração.',
+              D: 'Poder Político único, poder de autodeterminação, governo, administração.',
+              E: 'Centralização do Poder Político, poder de determinação, governo, Administração.'
+            }
+          },
+          {
+            num: 21,
+            answer: 'B',
+            stem: `ESTADO É A PESSOA JURÍDICA QUE TEM COMO ELEMENTOS BÁSICOS:`,
+            options: {
+              A: 'Soberania.',
+              B: 'Todas as alternativas estão corretas.',
+              C: 'Povo.',
+              D: 'Governo.',
+              E: 'Território.'
+            }
+          },
+          {
+            num: 22,
+            answer: 'E',
+            stem: `DE ACORDO COM O DISPOSTO NO ART. 3º DO ATO DAS DISPOSIÇÕES CONSTITUCIONAIS TRANSITÓRIAS, A REVISÃO CONSTITUCIONAL PODE SER FEITA DE FORMA:`,
+            options: {
+              A: 'A revisão constitucional será realizada a cada cinco anos, contados da promulgação da Constituição, pelo voto de 30% dos membros do Congresso Nacional, em sessão unicameral.',
+              B: 'A revisão constitucional será realizada a cada cinco anos, contados da promulgação da Constituição, pelo voto da maioria absoluta dos membros do Congresso Nacional, em sessão unicameral.',
+              C: 'A revisão constitucional será realizada após cinco anos, contados da promulgação da Constituição, pelo voto dos membros da câmara dos vereadores, em sessão bicameral.',
+              D: 'A revisão constitucional será realizada após cinco anos, contados da promulgação da Constituição, pelo voto de metade dos membros do Congresso Nacional, em sessão bicameral.',
+              E: 'A revisão constitucional será realizada após cinco anos, contados da promulgação da Constituição, pelo voto da maioria absoluta dos membros do Congresso Nacional, em sessão unicameral.'
+            }
+          },
+          {
+            num: 23,
+            answer: 'D',
+            stem: `EM QUE ANO FOI OUTORGADA A CONSTITUIÇÃO QUE FICOU CONHECIDA COMO "CONSTITUIÇÃO POLACA" E MARCOU O PERÍODO CONHECIDO COMO "ESTADO NOVO"?`,
+            options: {
+              A: '1837.',
+              B: '1888.',
+              C: '1934.',
+              D: '1937.',
+              E: '1956.'
+            }
+          },
+          {
+            num: 24,
+            answer: 'D',
+            stem: `NÃO SERÁ OBJETO DE DELIBERAÇÃO A PROPOSTA DE EMENDA TENDENTE A ABOLIR:`,
+            options: {
+              A: 'A divisão dos poderes, o voto secreto, os direitos de propriedade.',
+              B: 'O direito à execução de dívidas, o poder executivo, a autonomia do poder judiciário.',
+              C: 'A separação dos poderes, os direitos individuais, a proteção contra discriminação racial.',
+              D: 'A forma federativa de Estado, o voto direto, secreto, universal e periódico; a separação dos Poderes, os direitos e garantias individuais.',
+              E: 'O voto da mulher, as garantias asseguradas aos índios, a separação dos poderes.'
+            }
+          },
+          {
+            num: 25,
+            answer: 'A',
+            stem: `É COMPETÊNCIA COMUM DA UNIÃO, DOS ESTADOS, DO DISTRITO FEDERAL E DOS MUNICÍPIOS:`,
+            options: {
+              A: 'Impedir a evasão, a destruição e a descaracterização de obras de arte e de outros bens de valor histórico, artístico ou cultural.',
+              B: 'Cabe exclusivamente à União impedir a evasão, a destruição e a descaracterização de obras de arte e de outros bens de valor histórico, artístico ou cultural.',
+              C: 'Cabe exclusivamente aos Estados impedir a evasão, a destruição e a descaracterização de obras de arte e de outros bens de valor histórico, artístico ou cultural.',
+              D: 'A destruição e a caracterização de obras de arte e de outros bens de valor histórico, artístico ou cultural.',
+              E: 'Não há previsão constitucional para impedir a evasão, a destruição e a descaracterização de obras de arte e de outros bens de valor histórico, artístico ou cultural.'
+            }
+          },
+          {
+            num: 26,
+            answer: 'E',
+            stem: `A REPÚBLICA FEDERATIVA DO BRASIL, FORMADA PELA UNIÃO INDISSOLÚVEL DOS ESTADOS E MUNICÍPIOS E DO DISTRITO FEDERAL, CONSTITUI-SE EM ESTADO DEMOCRÁTICO DE DIREITO E TEM COMO FUNDAMENTOS:`,
+            options: {
+              A: 'Materialidade; formalidade; dignidade da pessoa humana; valores sociais do trabalho e da livre iniciativa; pluralismo político.',
+              B: 'Soberania; o voto direto e secreto; dignidade da pessoa humana; valores sociais do trabalho e da livre iniciativa; pluralismo político.',
+              C: 'Igualdade; democracia; dignidade da pessoa humana; valores sociais do trabalho e da livre iniciativa; pluralismo político.',
+              D: 'Formalidade, dignidade da pessoa humana, valores sociais do trabalho e da livre iniciativa, igualdade política.',
+              E: 'Soberania; cidadania; dignidade da pessoa humana; valores sociais do trabalho e da livre iniciativa; pluralismo político.'
+            }
+          },
+          {
+            num: 27,
+            answer: 'A',
+            stem: `A ORGANIZAÇÃO POLÍTICO-ADMINISTRATIVA DA REPÚBLICA FEDERATIVA DO BRASIL COMPREENDE:`,
+            options: {
+              A: 'União, Estados, Distrito Federal e Municípios.',
+              B: 'União e Estados.',
+              C: 'Estados.',
+              D: 'Distrito Federal e Estados.',
+              E: 'Estados e Municípios.'
+            }
+          },
+          {
+            num: 28,
+            answer: 'B',
+            stem: `SOBRE COMPETÊNCIA LEGISLATIVA É INCORRETO AFIRMAR QUE:`,
+            options: {
+              A: 'Compete privativamente à União legislar sobre diretrizes e bases da educação nacional.',
+              B: 'Compete privativamente à União legislar sobre responsabilidade por dano ao meio ambiente, ao consumidor, a bens e direitos de valor artístico, estético, histórico, turístico e paisagístico.',
+              C: 'Compete privativamente à União legislar sobre trânsito e transporte.',
+              D: 'Compete à União, aos Estados e ao Distrito Federal legislar concorrentemente sobre procedimentos em matéria processual.',
+              E: 'Compete à União, aos Estados e ao Distrito Federal legislar concorrentemente sobre previdência social, proteção e defesa da saúde.'
+            }
+          },
+          {
+            num: 29,
+            answer: 'A',
+            stem: `NO EXERCÍCIO DA FUNÇÃO JURISDICIONAL, O PODER JUDICIÁRIO:`,
+            options: {
+              A: 'Distribui a justiça dirimindo os conflitos intersubjetivos com a imposição da lei.',
+              B: 'Cria as Leis.',
+              C: 'É exercido pelo Governador.',
+              D: 'Governa os Estados.',
+              E: 'Cria conflitos com a imposição da lei.'
+            }
+          },
+          {
+            num: 30,
+            answer: 'C',
+            stem: `O ARTIGO 5º DA CONSTITUIÇÃO FEDERAL APRESENTA UMA SÉRIE DE DIREITOS E GARANTIAS QUE SÃO FUNDAMENTAIS À VIDA HUMANA DIGNA. CONTUDO, O CAPUT DO ARTIGO APRESENTA 5 DIREITOS QUE POSSUEM AINDA MAIS IMPORTÂNCIA E SÃO BASILARES PARA O ORDENAMENTO JURÍDICO. SENDO ELES:`,
+            options: {
+              A: 'Direito ao voto, Direito à liberdade, à igualdade, à segurança e à propriedade.',
+              B: 'Direito a ingressar na Justiça para defender seus direitos, Direito à liberdade, à igualdade, ao trabalho e à propriedade.',
+              C: 'Direito à vida, Direito à liberdade, à igualdade, à segurança e à propriedade.',
+              D: 'Direito à vida, Direito à liberdade, à paz, à segurança e à propriedade.',
+              E: 'Direito à vida, Direito ao casamento, à igualdade, à segurança e à propriedade.'
+            }
+          },
+          {
+            num: 31,
+            answer: 'D',
+            stem: `O PODER CONSTITUINTE ORIGINÁRIO CARACTERIZA-SE POR SER:`,
+            options: {
+              A: 'Originário, formal, incondicionado e formal.',
+              B: 'Limitado, decorrente e formal.',
+              C: 'Condicionado, ilimitado e rígido.',
+              D: 'Inicial, ilimitado, autônomo e incondicionado.',
+              E: 'Inaugural, limitado, condicionado.'
+            }
+          },
+          {
+            num: 32,
+            answer: 'D',
+            stem: `NO BRASIL, O ESTABELECIMENTO DE DIREITOS SOCIAIS ACONTECEU SOMENTE APÓS A PROMULGAÇÃO DA CONSTITUIÇÃO FEDERAL DE:`,
+            options: {
+              A: '1824.',
+              B: '1934.',
+              C: '1937.',
+              D: '1988.',
+              E: '1994.'
+            }
+          },
+          {
+            num: 33,
+            answer: 'E',
+            stem: `QUAIS FORMAS DE GOVERNO E ESTADO FORAM ADOTADOS PELA CONSTITUIÇÃO FEDERAL DE 1988?`,
+            options: {
+              A: 'A Constituição só prevê a forma de Governo e não dispõe sobre forma de Estado.',
+              B: 'A Constituição só prevê a forma de Estado e não dispõe sobre forma de Governo.',
+              C: 'Não existe previsão sobre forma de Estado e Governo na Constituição.',
+              D: 'Forma de governo Monarquia e a forma de Estado rígida.',
+              E: 'Forma de governo República e a forma de Estado Federativa.'
+            }
+          },
+          {
+            num: 34,
+            answer: 'E',
+            stem: `QUANDO FOI PROMULGADA A CONSTITUIÇÃO QUE NORTEIA O ATUAL DIREITO CONSTITUCIONAL, CONHECIDA COMO CONSTITUIÇÃO CIDADÃ?`,
+            options: {
+              A: '1888.',
+              B: '1930.',
+              C: '1964.',
+              D: '1978.',
+              E: '1988.'
+            }
+          },
+          {
+            num: 35,
+            answer: 'D',
+            stem: `SOBRE A REPRISTINAÇÃO, PODEMOS DIZER QUE:`,
+            options: {
+              A: 'A Teoria da Repristinação dispõe que uma lei revogada volta a gozar de vigência exceto quando a lei que a revogou for revogada por uma terceira lei.',
+              B: 'A Teoria da Repristinação dispõe que uma lei revogada não voltará a ter vigência.',
+              C: 'A Teoria da Repristinação dispõe que uma lei revogada não volta a gozar de vigência quando a lei que a revogou for revogada por uma terceira lei.',
+              D: 'A Teoria da Repristinação dispõe que uma lei revogada volta a gozar de vigência pelo fato da lei que a revogou ser revogada por uma terceira lei.',
+              E: 'A Teoria da Repristinação dispõe que uma lei revogada volta a gozar de vigência, quando for promulgada uma nova Lei que trata sobre o mesmo tema.'
+            }
+          },
+          {
+            num: 36,
+            answer: 'B',
+            stem: `O ROL DE DIREITOS FUNDAMENTAIS PREVISTO NA CF/88 É MERAMENTE EXEMPLIFICATIVO, ISSO SIGNIFICA QUE:`,
+            options: {
+              A: 'Os direitos e garantias expressos na Constituição não são de cumprimento obrigatório.',
+              B: 'Os direitos e garantias expressos na Constituição não excluem outros decorrentes do regime e dos princípios por ela adotados, ou dos tratados internacionais em que a República Federativa do Brasil seja parte.',
+              C: 'Os direitos e garantias expressos na Constituição não podem ser objeto de ação judicial.',
+              D: 'Os direitos e garantias expressos na Constituição excluem outros decorrentes do regime e dos princípios por ela adotados, ou dos tratados internacionais em que a República Federativa do Brasil seja parte.',
+              E: 'Os direitos e garantias expressos na Constituição podem ser utilizados em textos e trabalhos sobre o tema.'
+            }
+          },
+          {
+            num: 37,
+            answer: 'C',
+            stem: `SÃO PODERES DA UNIÃO, INDEPENDENTES E HARMÔNICOS ENTRE SI:`,
+            options: {
+              A: 'Legislativo, parlamentarista e Judiciário.',
+              B: 'Legislativo, repressivo e Judiciário.',
+              C: 'Legislativo, executivo e judiciário.',
+              D: 'Judiciário, coercitivo e legislativo.',
+              E: 'Não existe divisão de poderes na Constituição.'
+            }
+          },
+          {
+            num: 38,
+            answer: 'D',
+            stem: `O PODER CONSTITUINTE É A VONTADE SOBERANA DE UM POVO QUE A EXPRESSA POR MEIO DE SEUS REPRESENTANTES. ELE DIVIDE-SE EM:`,
+            options: {
+              A: 'Decorrente e derivado.',
+              B: 'Material e rígido.',
+              C: 'Formal e material.',
+              D: 'Originário e derivado.',
+              E: 'Originário e formal.'
+            }
+          },
+          {
+            num: 39,
+            answer: 'C',
+            stem: `O DIREITO CONSTITUCIONAL É A BASE DO DIREITO PÚBLICO INTERNO. NESSE SENTIDO QUAL A OPÇÃO ABAIXO DESCREVE SEU OBJETO:`,
+            options: {
+              A: 'Garantir direitos exceto direitos Sociais.',
+              B: 'A organização básica do estado, exceto normas relativas ao Direito do Trabalho.',
+              C: 'A organização básica do Estado.',
+              D: 'Evitar o caos nas Leis.',
+              E: 'Organização exclusiva das Leis Municipais.'
+            }
+          },
+          {
+            num: 40,
+            answer: 'B',
+            stem: `NÃO CONSTITUI OBJETIVO FUNDAMENTAL DA REPÚBLICA FEDERATIVA DO BRASIL:`,
+            options: {
+              A: 'Promover o bem de todos, sem preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação.',
+              B: 'Os valores sociais do trabalho e da livre-iniciativa.',
+              C: 'Erradicar a pobreza e a marginalidade e reduzir as desigualdades sociais e regionais.',
+              D: 'Construir uma sociedade livre, justa e solidária.',
+              E: 'Garantir o desenvolvimento nacional.'
+            }
+          },
+          {
+            num: 41,
+            answer: 'D',
+            stem: `O QUE SIGNIFICA A SIGLA ADCT?`,
+            options: {
+              A: 'Ato das disposições constitucionais transferíveis.',
+              B: 'Ato das declarações constitucionais transitórias.',
+              C: 'Ação das disposições constitucionais transitórias.',
+              D: 'Ato das disposições constitucionais transitórias.',
+              E: 'Ato das declarações constitucionais temáticas.'
+            }
+          },
+          {
+            num: 42,
+            answer: 'A',
+            stem: `OS LIMITES MATERIAIS EXPLÍCITOS DA CONSTITUIÇÃO FEDERAL SÃO AQUELES:`,
+            options: {
+              A: 'Contidos em cláusulas da Constituição que limitam a competência do poder revisor ou reformador.',
+              B: 'Contidos em cláusulas que tratam de direitos à propriedade.',
+              C: 'Que tratam dos direitos e garantias sociais.',
+              D: 'Contidos nas cláusulas que tratam sobre a organização das Leis Orgânicas Municipais.',
+              E: 'Que tratam dos direitos dos trabalhadores.'
+            }
+          },
+          {
+            num: 43,
+            answer: 'A',
+            stem: `HISTORICAMENTE, A REVOLUÇÃO FRANCESA FOI O PRIMEIRO GRANDE MARCO NA CONQUISTA DE DIREITOS E GARANTIAS FUNDAMENTAIS, ISTO PORQUE DELA DECORREU A:`,
+            options: {
+              A: 'Declaração Universal dos Direitos do Homem e do Cidadão.',
+              B: 'Declaração unilateral de direitos.',
+              C: 'Declaração Regional dos Direitos do Homem e do Cidadão.',
+              D: 'Constituição Cidadã.',
+              E: 'Primeira garantia fundamental.'
+            }
+          },
+          {
+            num: 44,
+            answer: 'E',
+            stem: `NO EXERCÍCIO DE SUAS ATRIBUIÇÕES E OBEDECENDO OS LIMITES DA LEI, O LEGISLATIVO, O EXECUTIVO E O JUDICIÁRIO DEVEM BUSCAR REALIZAR A FINALIDADE DO ESTADO, QUAL SEJA:`,
+            options: {
+              A: 'A construção de uma sociedade livre, justa e solidária; a garantia do desenvolvimento nacional; a manutenção da pobreza e da marginalização e a redução das desigualdades sociais e regionais, a promoção do bem de todos, afastando os preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação.',
+              B: 'A construção de uma sociedade livre, justa e solidária; não há previsão específica sobre o desenvolvimento nacional; a erradicação da pobreza e da marginalização e a redução das desigualdades sociais e regionais; a promoção do bem de todos, afastando os preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação.',
+              C: 'A construção de uma sociedade livre, justa e solidária; a garantia do desenvolvimento nacional; a erradicação da pobreza e da marginalização e a redução das desigualdades sociais e regionais; a promoção do bem de todos, não existindo regras que afastem os preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação.',
+              D: 'A construção de uma sociedade livre, justa e solidária; a garantia do retrocesso nacional; a erradicação da pobreza e da marginalização e a redução das desigualdades sociais e regionais, a promoção do bem de todos, incentivando os preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação.',
+              E: 'A construção de uma sociedade livre, justa e solidária; a garantia do desenvolvimento nacional; a erradicação da pobreza e da marginalização e a redução das desigualdades sociais e regionais, a promoção do bem de todos, afastando os preconceitos de origem, raça, sexo, cor, idade e quaisquer outras formas de discriminação.'
+            }
+          },
+          {
+            num: 45,
+            answer: 'D',
+            stem: `A CONSTITUIÇÃO PODERÁ SER EMENDADA MEDIANTE PROPOSTA:
+I - DE UM TERÇO, NO MÍNIMO, DOS MEMBROS DA CÂMARA DOS DEPUTADOS OU DO SENADO FEDERAL;
+II - DO PRESIDENTE DA REPÚBLICA;
+III - DE MAIS DA METADE DAS ASSEMBLEIAS LEGISLATIVAS DAS UNIDADES DA FEDERAÇÃO, MANIFESTANDO-SE, CADA UMA DELAS, PELA MAIORIA RELATIVA DE SEUS MEMBROS.
+IV - DO GOVERNADOR DO ESTADO.
+V - DE MAIS DA METADE DOS VOTOS DOS VEREADORES.
+QUAIS AFIRMATIVAS ESTÃO CORRETAS?`,
+            options: {
+              A: 'Apenas as alternativas I e V estão corretas.',
+              B: 'Apenas as alternativas II, III e V estão corretas.',
+              C: 'Apenas as alternativas I, IV e V estão corretas.',
+              D: 'Apenas as alternativas I, II e III estão corretas.',
+              E: 'Apenas as alternativas III, IV e V estão corretas.'
+            }
+          },
+          {
+            num: 46,
+            answer: 'B',
+            stem: `EM QUE ANO ACONTECEU A PROMULGAÇÃO DA CONSTITUIÇÃO POLÍTICA DO IMPÉRIO DO BRASIL?`,
+            options: {
+              A: '1934.',
+              B: '1824.',
+              C: '1889.',
+              D: '1808.',
+              E: '2001.'
+            }
+          },
+          {
+            num: 47,
+            answer: 'B',
+            stem: `CONSTITUEM OBJETIVOS FUNDAMENTAIS DA REPÚBLICA FEDERATIVA DO BRASIL:
+I - CONSTRUIR UMA SOCIEDADE LIVRE, JUSTA E SOLIDÁRIA;
+II - GARANTIR O DESENVOLVIMENTO NACIONAL;
+III - ERRADICAR A POBREZA E A MARGINALIZAÇÃO E REDUZIR AS DESIGUALDADES SOCIAIS E REGIONAIS;
+IV - PROMOVER O BEM DE TODOS, SEM PRECONCEITOS DE ORIGEM, RAÇA, SEXO, COR, IDADE E QUAISQUER OUTRAS FORMAS DE DISCRIMINAÇÃO.
+ASSINALE A ALTERNATIVA CORRETA:`,
+            options: {
+              A: 'Apenas as alternativas I, III estão corretas.',
+              B: 'Todas as alternativas estão corretas.',
+              C: 'Apenas as alternativas I, IV estão corretas.',
+              D: 'Apenas as alternativas I, II, III estão corretas.',
+              E: 'Apenas as alternativas II, III estão corretas.'
+            }
+          },
+          {
+            num: 48,
+            answer: 'D',
+            stem: `SEGUNDO O ESCALONAMENTO NORMATIVO PROPOSTO POR HANS KELSEN, A CONSTITUIÇÃO:`,
+            options: {
+              A: 'Não existe um ordenamento jurídico.',
+              B: 'Não possui força destacada.',
+              C: 'Ocupa a base do ordenamento jurídico.',
+              D: 'Ocupa o ápice do ordenamento jurídico, servindo de fundamento de validade para a produção normativa subsequente.',
+              E: 'Não é incluída na pirâmide de ordem jurídica.'
+            }
+          },
+          {
+            num: 49,
+            answer: 'D',
+            stem: `PODE-SE DIZER QUE A ORIGEM DO CONSTITUCIONALISMO ESTÁ NAS CONSTITUIÇÕES:`,
+            options: {
+              A: 'Dos Estados Unidos da América, em 1987.',
+              B: 'Da França de 1800.',
+              C: 'Constituição Federal de 1988.',
+              D: 'Dos Estados Unidos da América, em 1787, e da França, em 1791.',
+              E: 'Da Alemanha de 1787.'
+            }
+          },
+          {
+            num: 50,
+            answer: 'B',
+            stem: `É COMPETÊNCIA COMUM DA UNIÃO, DOS ESTADOS, DO DISTRITO FEDERAL E DOS MUNICÍPIOS:`,
+            options: {
+              A: 'Compete exclusivamente a União preservar as florestas, a fauna e a flora.',
+              B: 'Preservar as florestas, a fauna e a flora.',
+              C: 'Preservar florestas.',
+              D: 'Preservar a Fauna.',
+              E: 'Apenas os municípios devem preservar a flora.'
+            }
+          },
+          {
+            num: 51,
+            answer: 'C',
+            stem: `A CONSTITUIÇÃO DE 1988 DETERMINOU OS REMÉDIOS CONSTITUCIONAIS, QUAIS SEJAM:`,
+            options: {
+              A: 'Habeas data, habeas corpus e ação cautelar.',
+              B: 'Mandado de segurança, habeas corpus e ação civil de partilha de bens.',
+              C: 'Mandado de segurança, mandado de injunção, habeas data, habeas corpus e ação civil pública.',
+              D: 'Mandado de segurança, mandado de injunção, habeas data, habeas corpus e ação civil de exibição de documentos.',
+              E: 'Mandado de prisão, mandado de junção, habeas data, habeas corpus e ação civil pública.'
+            }
+          }
+        ]
+      },
+      {
+        id: 'filosofia',
+        title: 'Filosofia do Direito e Ética Profissional',
+        shortTitle: 'Filosofia e Ética',
+        color: 'violet',
+        icon: 'book',
+        notice: 'Atenção: este banco contém questões com enunciados idênticos ou muito similares — Q1 a Q3 e Q15 a Q20 — com gabaritos específicos. Observe cada detalhe!',
+        questions: [
+          {
+            num: 1,
+            answer: 'C',
+            stem: `TENDO COMO REFERÊNCIA A FILOSOFIA MEDIEVAL QUAL DAS ALTERNATIVAS APRESENTA CARACTERÍSTICA DESTA ÉPOCA? (Versão 1)`,
+            options: {
+              A: 'Entre o fragmentário e o unificador.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Relação entre razão e fé.',
+              D: 'Relação entre a ambiguidade e o rigor.',
+              E: 'Relação entre mito e a fé.'
+            }
+          },
+          {
+            num: 2,
+            answer: 'C',
+            stem: `TENDO COMO REFERÊNCIA A FILOSOFIA MEDIEVAL QUAL DAS ALTERNATIVAS APRESENTA CARACTERÍSTICA DESTA ÉPOCA? (Versão 2)`,
+            options: {
+              A: 'Relação entre mito e a fé.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Fronteiras entre o conhecimento e a liberdade humana.',
+              D: 'Entre o fragmentário e o unificador.',
+              E: 'Relação entre a ambiguidade e o rigor.'
+            }
+          },
+          {
+            num: 3,
+            answer: 'E',
+            stem: `TENDO COMO REFERÊNCIA A FILOSOFIA MEDIEVAL QUAL DAS ALTERNATIVAS APRESENTA CARACTERÍSTICA DESTA ÉPOCA? (Versão 3)`,
+            options: {
+              A: 'Relação entre a ambiguidade e o rigor.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Relação entre mito e a fé.',
+              D: 'Entre o fragmentário e o unificador.',
+              E: 'Existência e natureza de Deus.'
+            }
+          },
+          {
+            num: 4,
+            answer: 'A',
+            stem: `O PERÍODO SISTEMÁTICO, DO FINAL DO SÉCULO IV AO FINAL DO SÉCULO III A.C., QUANDO A FILOSOFIA BUSCA REUNIR E SISTEMATIZAR TUDO QUANTO FOI PENSADO SOBRE A COSMOLOGIA E A ANTROPOLOGIA, INTERESSANDO-SE, SOBRETUDO EM MOSTRAR QUE TUDO PODE SER OBJETO DO CONHECIMENTO FILOSÓFICO, DESDE QUE EXISTAM QUAIS CRITÉRIOS?`,
+            options: {
+              A: 'Da verdade e da ciência.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Do poder e da força.',
+              D: 'Da política e da igreja.',
+              E: 'Da Grécia e de Roma.'
+            }
+          },
+          {
+            num: 5,
+            answer: 'C',
+            stem: `A FILOSOFIA MODERNA VAI APRESENTAR VÁRIAS CARACTERÍSTICAS DE RUPTURA COM O ESTILO DA FILOSOFIA MEDIEVAL. UMA DELAS SERÁ A RUPTURA COM:`,
+            options: {
+              A: 'A Generalização.',
+              B: 'O Heliocentrismo.',
+              C: 'O Teocentrismo.',
+              D: 'A Experimentação.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 6,
+            answer: 'D',
+            stem: `QUAIS FORAM AS CARACTERÍSTICAS DO PERÍODO MEDIEVAL?`,
+            options: {
+              A: 'O progresso científico.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Crescimento populacional demasiado.',
+              D: 'Guerras, a fome e as grandes epidemias.',
+              E: 'Aumento da liberdade de expressão.'
+            }
+          },
+          {
+            num: 7,
+            answer: 'E',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA DESCREVE CORRETAMENTE AS CARACTERÍSTICAS DO MITO?`,
+            options: {
+              A: 'Pretendia narrar como as coisas eram ou tinham sido no passado imemorial.',
+              B: 'O mito narrava a origem através de genealogias e rivalidades ou alianças entre forças divinas sobrenaturais e personalizadas.',
+              C: 'O mito não se importava com contradições, com o fabuloso e o incompreensível.',
+              D: 'A crença no mito vinha da autoridade religiosa do narrador.',
+              E: 'Todas as alternativas estão corretas.'
+            }
+          },
+          {
+            num: 8,
+            answer: 'B',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA DESCREVE CORRETAMENTE AS CARACTERÍSTICAS DA FILOSOFIA?`,
+            options: {
+              A: 'A Filosofia se preocupa em explicar como e por que, no passado, no presente e no futuro (isto é, na totalidade do tempo), as coisas são como são.',
+              B: 'Todas as alternativas estão corretas.',
+              C: 'Explica a produção natural das coisas por elementos e causas naturais e impessoais.',
+              D: 'Não admite contradições, fabulação e coisas incompreensíveis.',
+              E: 'Exige que a explicação seja coerente, lógica e racional.'
+            }
+          },
+          {
+            num: 9,
+            answer: 'C',
+            stem: `QUAL DAS ALTERNATIVAS DIMENSIONA UMA CARACTERÍSTICA VITAL PARA A FILOSOFIA?`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'Recusa a análise e a crítica.',
+              C: 'A tendência a racionalidade.',
+              D: 'Recusa a investigação.',
+              E: 'A tendência a respostas inconclusivas.'
+            }
+          },
+          {
+            num: 10,
+            answer: 'A',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA NARRA A FORMA EM QUE O MITO ORIGINA O MUNDO E TUDO QUE NELE EXISTE?`,
+            options: {
+              A: 'Encontrando uma rivalidade ou uma aliança entre os deuses que faz surgir alguma coisa no mundo.',
+              B: 'Encontrando nas guerras uma saída para a libertação dos escravos na Grécia.',
+              C: 'Nenhuma das alternativas.',
+              D: 'Encontrando uma rivalidade política entre os atenienses e os espartanos.',
+              E: 'Encontrando por meio da conscientização o livre arbítrio.'
+            }
+          },
+          {
+            num: 11,
+            answer: 'E',
+            stem: `UMA DAS ALTERNATIVAS EM REFERÊNCIA INDICA UMA CONDIÇÃO HISTÓRICA PARA O SURGIMENTO DA FILOSOFIA. INDIQUE QUAL.`,
+            options: {
+              A: 'A invenção da máquina a vapor.',
+              B: 'Nenhuma das alternativas.',
+              C: 'A invenção estética.',
+              D: 'A invenção da metafísica.',
+              E: 'A invenção da política.'
+            }
+          },
+          {
+            num: 12,
+            answer: 'E',
+            stem: `DIFERENTE DO RACIONALISMO, O EMPIRISMO DEFENDIA QUAL POSSIBILIDADE?`,
+            options: {
+              A: 'A educação formal.',
+              B: 'A fé religiosa.',
+              C: 'A da ética em primeiro lugar.',
+              D: 'Nenhuma das alternativas.',
+              E: 'As experiências sensíveis.'
+            }
+          },
+          {
+            num: 13,
+            answer: 'C',
+            stem: `QUAL FOI O PRINCIPAL FILÓSOFO DA CORRENTE DE PENSAMENTO RACIONALISTA?`,
+            options: {
+              A: 'Sartre.',
+              B: 'Berkeley.',
+              C: 'Descartes.',
+              D: 'Sócrates.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 14,
+            answer: 'B',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA CITA CORRETAMENTE AS ÁREAS DE ATUAÇÃO DA ESTÉTICA?`,
+            options: {
+              A: 'Trata da realidade, do ser e do nada.',
+              B: 'Trata da arte, da noção de belo e de feio.',
+              C: 'Trata dos valores, da distinção entre o bem e o mal.',
+              D: 'Trata do raciocínio metódico e válido.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 15,
+            answer: 'C',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA CITA CORRETAMENTE AS ÁREAS DE ATUAÇÃO DA FILOSOFIA DA ÉTICA?`,
+            options: {
+              A: 'Trata do raciocínio metódico e válido.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Trata dos valores, da distinção entre o bem e o mal.',
+              D: 'Trata da arte, da noção de belo e de feio.',
+              E: 'Trata da natureza e validade do conhecimento.'
+            }
+          },
+          {
+            num: 16,
+            answer: 'E',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA CITA CORRETAMENTE AS ÁREAS DE ATUAÇÃO DA FILOSOFIA DA RELIGIÃO?`,
+            options: {
+              A: 'Trata da arte, da noção de belo e de feio.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Trata do raciocínio metódico e válido.',
+              D: 'Trata da realidade, do ser e do nada.',
+              E: 'Estuda racionalmente as doutrinas.'
+            }
+          },
+          {
+            num: 17,
+            answer: 'A',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA CITA CORRETAMENTE AS ÁREAS DE ATUAÇÃO DA FILOSOFIA DA CIÊNCIA?`,
+            options: {
+              A: 'Estuda os métodos e a validade da ciência.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Trata dos valores, da distinção entre o bem e o mal.',
+              D: 'Estuda as relações e formas de organização de uma empresa.',
+              E: 'Trata do raciocínio metódico e válido.'
+            }
+          },
+          {
+            num: 18,
+            answer: 'E',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA CITA CORRETAMENTE AS ÁREAS DE ATUAÇÃO DA FILOSOFIA ORGANIZACIONAL?`,
+            options: {
+              A: 'Estuda racionalmente as doutrinas.',
+              B: 'Trata do raciocínio metódico e válido.',
+              C: 'Nenhuma das alternativas.',
+              D: 'Estuda as teorias do Estado e da política.',
+              E: 'Estuda as relações e formas de organização de uma empresa.'
+            }
+          },
+          {
+            num: 19,
+            answer: 'D',
+            stem: `QUAL DAS ALTERNATIVAS EM REFERÊNCIA CITA CORRETAMENTE AS ÁREAS DE ATUAÇÃO DA FILOSOFIA POLÍTICA?`,
+            options: {
+              A: 'Estuda as relações e formas de organização de uma empresa.',
+              B: 'Estuda racionalmente as doutrinas.',
+              C: 'Estuda terapias para o tratamento psíquico.',
+              D: 'Nenhuma das alternativas.',
+              E: 'Estuda os métodos e a validade da ciência.'
+            }
+          },
+          {
+            num: 20,
+            answer: 'C',
+            stem: `PODEMOS CHAMAR DE FILOSOFIA MEDIEVAL A FILOSOFIA QUE SE DESENVOLVEU NA: (Versão 1)`,
+            options: {
+              A: 'Ásia Maior durante a idade média.',
+              B: 'Em Atenas durante a idade média.',
+              C: 'Europa durante a idade média.',
+              D: 'Em todo planeta durante a idade média.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 21,
+            answer: 'D',
+            stem: `PODEMOS CHAMAR DE FILOSOFIA MEDIEVAL A FILOSOFIA QUE SE DESENVOLVEU NA EUROPA DURANTE A IDADE MÉDIA (ENTRE OS SÉCULOS V E XV). ESTE PERÍODO FOI MARCADO POR GRANDE INFLUÊNCIA DE QUE SETOR DA SOCIEDADE? (Versão 2)`,
+            options: {
+              A: 'Comunidade em geral.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Governo.',
+              D: 'Igreja.',
+              E: 'Os militares da época.'
+            }
+          },
+          {
+            num: 22,
+            answer: 'A',
+            stem: `O PERÍODO GREGO PRÉ-SOCRÁTICO SE OCUPAVA FUNDAMENTALMENTE SOBRE A ORIGEM DO MUNDO E:`,
+            options: {
+              A: 'As causas das transformações da natureza.',
+              B: 'As causas das proibições ditadas pelos governantes da época.',
+              C: 'As causas das transformações econômicas da Grécia.',
+              D: 'Nenhuma das alternativas.',
+              E: 'As causas das transformações tecnológicas.'
+            }
+          },
+          {
+            num: 23,
+            answer: 'E',
+            stem: `ARISTÓTELES FOI VIVER EM ATENAS AOS 17 ANOS, ONDE CONHECEU PLATÃO, TORNANDO-SE SEU DISCÍPULO. PASSOU O ANO DE 343 A.C. COMO PRECEPTOR DO IMPERADOR ALEXANDRE, O GRANDE, DA MACEDÔNIA. FUNDOU EM ATENAS, NO ANO DE 335 A.C., A ESCOLA LICEU, VOLTADA PARA O ESTUDO DAS CIÊNCIAS NATURAIS. SEUS ESTUDOS FILOSÓFICOS BASEAVAM-SE EM EXPERIMENTAÇÕES PARA COMPROVAR QUAIS FENÔMENOS?`,
+            options: {
+              A: 'Da infância.',
+              B: 'Da imaginação.',
+              C: 'Nenhuma das alternativas.',
+              D: 'Da sensibilidade.',
+              E: 'Da natureza.'
+            }
+          },
+          {
+            num: 24,
+            answer: 'B',
+            stem: `ARISTÓTELES É CONSIDERADO O CRIADOR DO PENSAMENTO:`,
+            options: {
+              A: 'Positivista.',
+              B: 'Lógico.',
+              C: 'Escolástico.',
+              D: 'Estruturalista.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 25,
+            answer: 'E',
+            stem: `ARISTÓTELES É CONSIDERADO O CRIADOR DO PENSAMENTO LÓGICO. SUAS OBRAS INFLUENCIARAM TAMBÉM:`,
+            options: {
+              A: 'Evolução das espécies.',
+              B: 'O conhecimento intuitivo.',
+              C: 'Nenhuma das alternativas.',
+              D: 'O conhecimento sensitivo.',
+              E: 'A teologia medieval da cristandade.'
+            }
+          },
+          {
+            num: 26,
+            answer: 'D',
+            stem: `ESCOLÁSTICA FOI O PERÍODO DO SÉCULO XIII AO SÉCULO XIV QUE TRATOU A QUESTÃO DA RAZÃO E DA FÉ, DA FILOSOFIA E DA TEOLOGIA. NESTE PERÍODO AS INVESTIGAÇÕES CIENTÍFICAS E FILOSÓFICAS NÃO PODERIAM CONTRARIAR AS VERDADES ESTABELECIDAS PELA:`,
+            options: {
+              A: 'Misticismo vindo dos mitos.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Pelos governantes.',
+              D: 'Fé católica.',
+              E: 'Pela comunidade científica.'
+            }
+          },
+          {
+            num: 27,
+            answer: 'D',
+            stem: `SANTO AGOSTINHO DE HIPONA (354-430) BUSCOU A RAZÃO PARA JUSTIFICAR AS CRENÇAS. FOI ELE QUEM DESENVOLVEU A IDEIA DA INTERIORIDADE, OU SEJA, O HOMEM É DOTADO DA CONSCIÊNCIA MORAL E DE QUAL OUTRA CAPACIDADE?`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'Livre pensamento.',
+              C: 'Liberdade.',
+              D: 'Livre arbítrio.',
+              E: 'Livre liberalismo.'
+            }
+          },
+          {
+            num: 28,
+            answer: 'A',
+            stem: `O QUE MUITOS PENSADORES DA IDADE MÉDIA DEFENDIAM SOBRE O PENSAMENTO FILOSÓFICO?`,
+            options: {
+              A: 'Que a fé não deveria ficar subordinada à razão.',
+              B: 'Que o neoliberalismo já não possuía mais força.',
+              C: 'Que a consciência seria sempre a melhor forma de pensar.',
+              D: 'Nenhuma das alternativas.',
+              E: 'Que a razão não deveria ficar subordinada à fé.'
+            }
+          },
+          {
+            num: 29,
+            answer: 'D',
+            stem: `A FILOSOFIA SURGE QUANDO SE DESCOBRIU QUE A VERDADE DO MUNDO E DOS HUMANOS NÃO ERA ALGO SECRETO E MISTERIOSO QUE PRECISASSE SER REVELADO POR DIVINDADES A ALGUNS ESCOLHIDOS, MAS QUE:`,
+            options: {
+              A: 'Esta deveria ser ensinada apenas aos interessados por filosofia.',
+              B: 'Esta seria utilizada para manutenção do poder pelos governantes.',
+              C: 'Nenhuma das alternativas.',
+              D: 'Ao contrário, podia ser conhecida por todos, através da razão.',
+              E: 'Ao contrário, podia ser conhecida por todos que não fossem escravos.'
+            }
+          },
+          {
+            num: 30,
+            answer: 'D',
+            stem: `QUAIS FORAM OS PERÍODOS DA GRÉCIA ANTIGA?`,
+            options: {
+              A: 'Conservador, refinado, pré-moderno, pós-medieval.',
+              B: 'Patrística, positivista, racionalista, ideológica.',
+              C: 'Nenhuma das alternativas.',
+              D: 'Pré-socrático, socrático, sistemático, helenístico.',
+              E: 'Reestruturador, pós-moderno, humanista, trans-humanista.'
+            }
+          },
+          {
+            num: 31,
+            answer: 'A',
+            stem: `O PERÍODO HELENÍSTICO OU GRECO-ROMANO CONSISTE DO FINAL DO SÉCULO III A.C. ATÉ O SÉCULO VI DEPOIS DE CRISTO. NESSE LONGO PERÍODO, QUE JÁ ALCANÇA ROMA E O PENSAMENTO DOS PRIMEIROS PADRES DA IGREJA, A FILOSOFIA SE OCUPA, SOBRETUDO COM AS QUESTÕES DA ÉTICA, DO CONHECIMENTO HUMANO E DAS RELAÇÕES ENTRE O HOMEM E A NATUREZA E DE AMBOS COM:`,
+            options: {
+              A: 'Deus.',
+              B: 'A diversidade.',
+              C: 'O Governante.',
+              D: 'O mito.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 32,
+            answer: 'D',
+            stem: `QUAIS AS PRINCIPAIS CARACTERÍSTICAS DA FILOSOFIA MODERNA?`,
+            options: {
+              A: 'Dever e liberdade.',
+              B: 'O caráter moral e valores.',
+              C: 'Desejo e vontade.',
+              D: 'O uso da razão e ciência.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 33,
+            answer: 'B',
+            stem: `COMO A FILOSOFIA CLÁSSICA SOBREVIVE NO PERÍODO MEDIEVAL?`,
+            options: {
+              A: 'Perde sua força, mas permanece livre para ser debatida.',
+              B: 'Confinada nos mosteiros religiosos.',
+              C: 'Somente os padres da igreja podiam se utilizar da razão.',
+              D: 'Aumenta sua força e passa a ser ponto fundamental na Igreja.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 34,
+            answer: 'C',
+            stem: `QUAIS FORAM OS PERÍODOS DA ÉPOCA MEDIEVAL?`,
+            options: {
+              A: 'Existencialismo, cientificismo e objetivismo.',
+              B: 'Nenhuma das alternativas.',
+              C: 'Patrística, escolástica e renascimento.',
+              D: 'Sofocracia, utopia e timocracia.',
+              E: 'Oligarquia, positivismo e liberalismo.'
+            }
+          },
+          {
+            num: 35,
+            answer: 'B',
+            stem: `MODERNISMO FOI O MOVIMENTO QUE ENFATIZAVA A RAZÃO E QUE SE EXPRESSAVA MAIS PLENAMENTE ATRAVÉS DA:`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'Ciência.',
+              C: 'Objetivismo.',
+              D: 'Ambiguidade.',
+              E: 'Fé.'
+            }
+          },
+          {
+            num: 36,
+            answer: 'D',
+            stem: `AO ESTUDARMOS OS PRIMEIROS FILÓSOFOS NOS DEPARAMOS COM INÚMERAS PERGUNTAS QUE ESTES SE FAZIAM EM BUSCA DO CONHECIMENTO. ENTRE AS ALTERNATIVAS ABAIXO QUAL CORRESPONDE INCORRETAMENTE A ESTES QUESTIONAMENTOS:`,
+            options: {
+              A: 'Por que as coisas se tornam opostas ao que eram?',
+              B: 'Por que nada permanece idêntico a si mesmo?',
+              C: 'Por que os seres nascem e morrem?',
+              D: 'Como se iniciou a Revolução Industrial?',
+              E: 'Por que tudo muda?'
+            }
+          },
+          {
+            num: 37,
+            answer: 'C',
+            stem: `O PERÍODO SOCRÁTICO OU ANTROPOLÓGICO CONSISTE DO FINAL DO SÉCULO V E TODO O SÉCULO IV A.C. E INVESTIGA POR MEIO DA FILOSOFIA AS QUESTÕES HUMANAS. ESTAS QUESTÕES CONSISTEM EM:`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'A comparação, a auto-estima, e a superação.',
+              C: 'A ética, a política e as técnicas.',
+              D: 'A controvérsia, a compreensão, o esquema.',
+              E: 'O método experimental, Hipótese, e a observação.'
+            }
+          },
+          {
+            num: 38,
+            answer: 'E',
+            stem: `SÓCRATES NASCEU EM ATENAS, PROVAVELMENTE NO ANO DE 470 A.C., E TORNOU-SE UM DOS PRINCIPAIS PENSADORES DA GRÉCIA ANTIGA. PODEMOS AFIRMAR QUE SÓCRATES FUNDOU O QUE CONHECEMOS HOJE POR FILOSOFIA:`,
+            options: {
+              A: 'Europeia.',
+              B: 'Oriental.',
+              C: 'Asiática.',
+              D: 'Nenhuma das alternativas.',
+              E: 'Ocidental.'
+            }
+          },
+          {
+            num: 39,
+            answer: 'E',
+            stem: `SÓCRATES FOI INDICADO COMO O HOMEM MAIS SÁBIO DO MUNDO. QUEM FEZ ESTA INDICAÇÃO?`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'Os cidadãos de Atenas.',
+              C: 'A Aristocracia.',
+              D: 'O governante da época.',
+              E: 'O Oráculo de Delfos.'
+            }
+          },
+          {
+            num: 40,
+            answer: 'B',
+            stem: `SÓCRATES FOI INDICADO COMO O HOMEM MAIS SÁBIO DO MUNDO PELO ORÁCULO DE DELFOS E A PARTIR DISSO COMEÇOU A "LEVAR CONHECIMENTO AOS ATENIENSES". NA VERDADE ATRAVÉS DE SEU MÉTODO DIALÉTICO O QUE ELE FORÇAVA O INDIVÍDUO A RECONHECER?`,
+            options: {
+              A: 'Sua Inteligência.',
+              B: 'Suas ilusões.',
+              C: 'Nenhuma das alternativas.',
+              D: 'Sua liberdade.',
+              E: 'Suas limitações.'
+            }
+          },
+          {
+            num: 41,
+            answer: 'B',
+            stem: `SÓCRATES NÃO FOI MUITO BEM ACEITO POR PARTE DA ARISTOCRACIA GREGA, POIS DEFENDIA ALGUMAS IDEIAS CONTRÁRIAS AO FUNCIONAMENTO DA SOCIEDADE GREGA. TEMENDO ALGUM TIPO DE MUDANÇA NA SOCIEDADE, A ELITE MAIS CONSERVADORA DE ATENAS COMEÇA A ENCARAR SÓCRATES COMO UM INIMIGO PÚBLICO E UM AGITADOR EM POTENCIAL. O QUE ACONTECE COM SÓCRATES ENTÃO?`,
+            options: {
+              A: 'Foi preso e após sua liberdade continuou sua proposta filosófica por Atenas.',
+              B: 'Foi preso e condenado a suicidar-se tomando um veneno chamado cicuta.',
+              C: 'Foi preso e morre na prisão por volta de 399 a.C.',
+              D: 'Foi preso e exilado para Esparta.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 42,
+            answer: 'B',
+            stem: `"SÓ SEI QUE NADA SEI" É UMA FAMOSA FRASE ATRIBUÍDA A UM FILÓSOFO GREGO E SIGNIFICA UM RECONHECIMENTO DA PRÓPRIA IGNORÂNCIA DA PARTE DO AUTOR. QUEM FOI ESTE FILÓSOFO?`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'Sócrates.',
+              C: 'Aristóteles.',
+              D: 'Tales.',
+              E: 'Platão.'
+            }
+          },
+          {
+            num: 43,
+            answer: 'B',
+            stem: `A PALAVRA FILOSOFIA TEM ORIGEM GREGA E EM SUA ETIMOLOGIA (PHILIA + SOPHIA) QUER DIZER:`,
+            options: {
+              A: 'Entender o saber.',
+              B: 'Amor pelo saber.',
+              C: 'Saber de todos.',
+              D: 'Saber apenas dos filósofos.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 44,
+            answer: 'C',
+            stem: `ATRIBUI-SE AO FILÓSOFO GREGO PITÁGORAS DE SAMOS A INVENÇÃO DA PALAVRA FILOSOFIA. PITÁGORAS TERIA AFIRMADO QUE A SABEDORIA PLENA E COMPLETA PERTENCE AOS DEUSES, MAS QUE OS HOMENS PODEM DESEJÁ-LA OU AMÁ-LA SE TRANSFORMANDO EM:`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'Governante de Atenas.',
+              C: 'Filósofo.',
+              D: 'Gregos livres.',
+              E: 'Políticos atuantes.'
+            }
+          },
+          {
+            num: 45,
+            answer: 'E',
+            stem: `NA DEFINIÇÃO DE PITÁGORAS COMO A FILOSOFIA É ENTENDIDA?`,
+            options: {
+              A: 'Nenhuma das alternativas.',
+              B: 'Em sua função se pretendia o convencimento dos outros Atenienses.',
+              C: 'Como uma aposta no poder dos deuses venerados na Grécia antiga.',
+              D: 'Como um processo de pensamento da aristocracia da época.',
+              E: 'Como aspiração ao conhecimento racional, lógico e sistemático da realidade natural e humana.'
+            }
+          },
+          {
+            num: 46,
+            answer: 'C',
+            stem: `COM O SURGIMENTO DOS PRIMEIROS FILÓSOFOS NA GRÉCIA ESTES SE DEPARAM COM UMA NARRATIVA SOBRE A ORIGEM DAS COISAS. QUAL ERA ESTA NARRATIVA?`,
+            options: {
+              A: 'A conscientização.',
+              B: 'O agir.',
+              C: 'O mito.',
+              D: 'A interpretação.',
+              E: 'A ideologia.'
+            }
+          },
+          {
+            num: 47,
+            answer: 'C',
+            stem: `PLATÃO NASCEU EM ATENAS, PROVAVELMENTE EM 427 A.C. E MORREU EM 347 A.C. É UM DOS PRINCIPAIS PENSADORES GREGOS, POIS INFLUENCIOU A FILOSOFIA OCIDENTAL. SUAS IDEIAS BASEIAM-SE NA DIFERENCIAÇÃO DO MUNDO ENTRE:`,
+            options: {
+              A: 'Entre o pensamento moderno e os sentimentos morais.',
+              B: 'Entre a diversidade das teorias do justo meio.',
+              C: 'As coisas sensíveis (mundo das ideias e a inteligência) e as coisas visíveis (seres vivos e a matéria).',
+              D: 'Entre as relações de produção e luta de classes.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 48,
+            answer: 'A',
+            stem: `A RUPTURA ENTRE O PERÍODO MEDIEVAL E A TRANSPOSIÇÃO PARA O PERÍODO MODERNO SE CHAMOU:`,
+            options: {
+              A: 'Renascimento.',
+              B: 'Liberdade negativa.',
+              C: 'Autonomia.',
+              D: 'Nenhuma das alternativas.',
+              E: 'Transcendente.'
+            }
+          },
+          {
+            num: 49,
+            answer: 'A',
+            stem: `COMO A FILOSOFIA MEDIEVAL FOI MARCADA POR GRANDE INFLUÊNCIA DA IGREJA CATÓLICA NAS DIVERSAS ÁREAS DO CONHECIMENTO, QUAIS TEMAS PREDOMINARAM NO CAMPO FILOSÓFICO?`,
+            options: {
+              A: 'Temas religiosos.',
+              B: 'Temas militares.',
+              C: 'Temas tradicionais.',
+              D: 'Temas científicos.',
+              E: 'Nenhuma das alternativas.'
+            }
+          },
+          {
+            num: 50,
+            answer: 'E',
+            stem: `PARA OS EMPIRISTAS O HOMEM É UMA FOLHA DE PAPEL EM BRANCO, ONDE É ESCRITA A SUA HISTÓRIA A PARTIR DE SUAS EXPERIÊNCIAS. PARA ELES O CONHECIMENTO PARTE DAS:`,
+            options: {
+              A: 'Escritas para o conhecimento.',
+              B: 'Das produções para o consumo.',
+              C: 'Nenhuma das alternativas.',
+              D: 'Das lutas de classes para o governo.',
+              E: 'Sensações às ideias.'
+            }
+          }
+        ]
+      },
+      {
+        id: 'metodologia',
+        title: 'Metodologia Científica',
+        shortTitle: 'Metodologia',
+        color: 'amber',
+        icon: 'flask',
+        notice: null,
+        questions: [
+          {
+            num: 1,
+            answer: 'E',
+            stem: `Sobre pesquisa científica é INCORRETO afirmar que:`,
+            options: {
+              A: 'É a busca pelas informações corretas',
+              B: 'É a investigação da informação',
+              C: 'Aprimorar conhecimentos',
+              D: 'Descobrir fatos ao nosso redor',
+              E: 'Cópia de informações'
+            }
+          },
+          {
+            num: 2,
+            answer: 'A',
+            stem: `O que é pesquisa científica?`,
+            options: {
+              A: 'É a procura de uma informação, busca, investigação e indagação',
+              B: 'Opiniões sobre um determinado assunto científico',
+              C: 'Informações retiradas de sites da internet',
+              D: 'Simples compilação de informações de forma desordenada',
+              E: 'Cópia de informações'
+            }
+          },
+          {
+            num: 3,
+            answer: 'C',
+            stem: `Diante das principais características do conhecimento científico informe a característica que NÃO ESTÁ RELACIONADA com o conhecimento científico:`,
+            options: {
+              A: 'Racionalidade',
+              B: 'Objetividade',
+              C: 'Subjetividade',
+              D: 'Regularidade',
+              E: 'Todas as alternativas estão corretas'
+            }
+          },
+          {
+            num: 4,
+            answer: 'D',
+            stem: `Com relação aos Métodos Científicos pode-se dizer que dentre os principais, no método hipotético-dedutivo, é considerado:
+I. Confronta os métodos Dedutivo e Indutivo
+II. É considerado pelos pesquisadores e críticos, o método mais Científico
+III. O conhecimento é fundamentado na experiência
+Assinale a alternativa correta dentre as informações acima:`,
+            options: {
+              A: 'Todas as alternativas estão erradas',
+              B: 'II e III estão corretas',
+              C: 'I e III estão corretas',
+              D: 'I e II estão corretas',
+              E: 'Todas as alternativas estão corretas'
+            }
+          },
+          {
+            num: 5,
+            answer: 'C',
+            stem: `Com relação aos Métodos Científicos pode-se dizer que dentre os principais, no método Indutivo é considerado:
+I. O conhecimento é fundamentado na experiência
+II. O conhecimento é levantado nos princípios preestabelecidos
+III. Parte da enumeração de experiências para chegar às conclusões
+Assinale a alternativa correta dentre as informações acima:`,
+            options: {
+              A: 'Todas as alternativas estão erradas',
+              B: 'Todas as alternativas estão corretas',
+              C: 'I e III estão corretas',
+              D: 'II e III estão corretas',
+              E: 'I e II estão corretas'
+            }
+          },
+          {
+            num: 6,
+            answer: 'A',
+            stem: `Com relação aos Métodos Científicos pode-se dizer que dentre os principais, o método Dedutivo é:
+I. Apenas a razão é capaz de levar ao conhecimento verdadeiro
+II. A descoberta da verdade a partir de outras verdades já conhecidas
+III. Construção lógica a partir de verdades existentes é retirada uma nova verdade, uma conclusão do estudo
+De acordo com as afirmações acima, a alternativa correta é:`,
+            options: {
+              A: 'Todas as alternativas estão corretas',
+              B: 'II e III',
+              C: 'I e III',
+              D: 'Todas as alternativas estão erradas',
+              E: 'I e II'
+            }
+          },
+          {
+            num: 7,
+            answer: 'B',
+            stem: `Com relação aos Métodos Científicos pode-se dizer que dentre os principais, no método dialético, podemos considerar:
+I. Confronta o método Dedutivo
+II. Considera que no universo tudo é movimento e mudança
+III. Confronta o Método Indutivo
+Assinale a alternativa correta dentre as informações acima:`,
+            options: {
+              A: 'I e III estão corretas',
+              B: 'II está correta',
+              C: 'I está correta',
+              D: 'I e II estão corretas',
+              E: 'II e III estão corretas'
+            }
+          },
+          {
+            num: 8,
+            answer: 'A',
+            stem: `Com relação ao Conhecimento Científico e o Conhecimento Popular pode-se dizer que:
+I. O Conhecimento Científico é o estudo e pesquisa que são comprovados
+II. O Conhecimento Científico é o estudo do dia-a-dia
+III. O Conhecimento Popular é o estudo do dia-a-dia
+IV. O Conhecimento Popular é o estudo que é comprovado cientificamente
+V. O conhecimento Popular é o conhecimento que vem da televisão e internet
+Diante das alternativas informe qual a resposta CORRETA:`,
+            options: {
+              A: 'I e III',
+              B: 'II e III',
+              C: 'II e V',
+              D: 'I e V',
+              E: 'II e IV'
+            }
+          },
+          {
+            num: 9,
+            answer: 'B',
+            stem: `"Levantamento bibliográfico; entrevistas com pessoas que tiveram experiências práticas com o problema pesquisado" são características referentes a qual tipo de pesquisa?`,
+            options: {
+              A: 'Pesquisa Aplicada',
+              B: 'Pesquisa Exploratória',
+              C: 'Pesquisa Quantitativa',
+              D: 'Pesquisa Qualitativa',
+              E: 'Pesquisa Descritiva'
+            }
+          },
+          {
+            num: 10,
+            answer: 'C',
+            stem: `"Utilizar material já publicado, constituído basicamente de livros, artigos de periódicos e atualmente com informações disponibilizadas na internet", são dados referentes a qual tipo de pesquisa?`,
+            options: {
+              A: 'Pesquisa Exploratória',
+              B: 'Pesquisa Qualitativa',
+              C: 'Pesquisa Bibliográfica',
+              D: 'Todas as respostas estão corretas',
+              E: 'Pesquisa Descritiva'
+            }
+          },
+          {
+            num: 11,
+            answer: 'B',
+            stem: `Com relação aos OBJETIVOS da pesquisa podemos identificar:`,
+            options: {
+              A: 'Pesquisa Descritiva',
+              B: 'Todas as respostas estão corretas',
+              C: 'Pesquisa Exploratória',
+              D: 'Nenhuma das alternativas',
+              E: 'Pesquisa Explicativa'
+            }
+          },
+          {
+            num: 12,
+            answer: 'C',
+            stem: `O Conhecimento Empírico, também chamado como conhecimento popular, é o conhecimento adquirido pela nossa experiência diária. Desta forma é correto afirmar que:
+I. É o conhecimento oriundo do senso comum
+II. É o conhecimento que se adquire fazendo e vivenciando as experiências do dia-a-dia
+III. É o conhecimento que não conseguimos perceber`,
+            options: {
+              A: 'A alternativa III está correta',
+              B: 'A alternativa I está correta',
+              C: 'As alternativas I e II estão corretas',
+              D: 'As alternativas I, II e III estão corretas',
+              E: 'A alternativa II está correta'
+            }
+          },
+          {
+            num: 13,
+            answer: 'D',
+            stem: `Sobre o "senso comum" podemos dizer que é uma mescla entre a tradição cultural e familiar com as experiências pessoais ao longo de nossas vidas. Desta forma é INCORRETO considerar como característica de senso comum:`,
+            options: {
+              A: 'É transmitida de geração para geração',
+              B: 'Educação não formal',
+              C: 'Tradição cultural',
+              D: 'É transmitido por intermédio de metodologias apropriadas',
+              E: 'Baseado em imitação e em experiências pessoais'
+            }
+          },
+          {
+            num: 14,
+            answer: 'A',
+            stem: `O Conhecimento Teológico implica em uma atitude de fé diante de revelações de um mistério, ou de revelações sobrenaturais. Desta forma sobre este conhecimento é correto afirmar que:
+I. São os conhecimentos oriundos da fé e da crença das pessoas
+II. A ciência explica e verifica através de estudos, todas as revelações comprovando a sua existência
+III. Muitas vezes não se pode comprovar, porém o seu ápice é responder o que a ciência não consegue explicar.`,
+            options: {
+              A: 'As alternativas I e III estão corretas',
+              B: 'A alternativa II está correta',
+              C: 'A alternativa III está correta',
+              D: 'As alternativas I e II estão corretas',
+              E: 'As alternativas II e III estão corretas'
+            }
+          },
+          {
+            num: 15,
+            answer: 'C',
+            stem: `O Conhecimento Filosófico busca sempre o sentido da justificação e a interpretação da existência do homem, podendo refletir sobre a existência do universo e a sua construção. Desta forma é correto afirmar que:
+I. Estuda os elementos imperceptíveis.
+II. Estuda o que não conseguimos perceber
+III. Estuda a essência do universo`,
+            options: {
+              A: 'A alternativa II está correta',
+              B: 'As alternativas I e II estão corretas',
+              C: 'As alternativas I, II e III estão corretas',
+              D: 'As alternativas II e III estão corretas',
+              E: 'A alternativa I está correta'
+            }
+          },
+          {
+            num: 16,
+            answer: 'A',
+            stem: `O Conhecimento Científico preocupa-se com as causas e leis que motivam os fenômenos variados. Desta forma é correto afirmar que faz parte do conhecimento científico:
+I. Explicação profunda dos fenômenos
+II. É o conhecimento da vivência
+III. Quanto mais inter-relações entre os objetos, maior será a validade daquele conhecimento para a humanidade`,
+            options: {
+              A: 'As alternativas I e III estão corretas',
+              B: 'A alternativa II está correta',
+              C: 'A alternativa I está correta',
+              D: 'As alternativas I e II estão corretas',
+              E: 'A alternativa III está correta'
+            }
+          },
+          {
+            num: 17,
+            answer: 'B',
+            stem: `É correto afirmar que o conhecimento científico:
+I. Resulta de uma investigação
+II. É verificável pela demonstração ou experiência
+III. Passados de geração para geração
+IV. Conhecimento obtido de forma racional
+V. Sempre será subjetivo
+Dentre as alternativas acima, assinale a resposta correta:`,
+            options: {
+              A: 'II, III e IV',
+              B: 'I, II e IV',
+              C: 'II, IV e V',
+              D: 'III e V',
+              E: 'I, III e V'
+            }
+          },
+          {
+            num: 18,
+            answer: 'A',
+            stem: `O conhecimento científico é formado principalmente por:`,
+            options: {
+              A: 'Pela apropriação de conhecimentos existentes transformando-os em conhecimentos científicos',
+              B: 'Pela apropriação e uso da internet',
+              C: 'Pela quantidade de amigos que uma pessoa tem na vida',
+              D: 'Pela evolução da pessoa',
+              E: 'Nenhuma resposta está correta'
+            }
+          },
+          {
+            num: 19,
+            answer: 'B',
+            stem: `Marque a alternativa que representa os 4 principais tipos de conhecimentos:`,
+            options: {
+              A: 'Teológico; Filosófico; Empírico; Artístico',
+              B: 'Teológico; Filosófico; Empírico; Científico',
+              C: 'Teológico; Empírico; Artístico; Científico',
+              D: 'Teológico; Sociológico; Empírico; Científico',
+              E: 'Teológico; Filosófico; Sociológico; Científico'
+            }
+          },
+          {
+            num: 20,
+            answer: 'A',
+            stem: `Do que a técnica da pesquisa trata?`,
+            options: {
+              A: 'Procedimentos práticos para elaborar o trabalho científico',
+              B: 'Todas as alternativas estão erradas',
+              C: 'Todas as alternativas estão corretas',
+              D: 'Quantificar os métodos utilizados no trabalho científico',
+              E: 'Métodos aplicados'
+            }
+          },
+          {
+            num: 21,
+            answer: 'D',
+            stem: `O método científico deverá ser:
+I. Racional
+II. Metódico
+III. Desordenado
+IV. Sistemático
+V. Verificação
+Assinale a alternativa correta:`,
+            options: {
+              A: 'Todas as alternativas estão corretas',
+              B: 'I, II e III',
+              C: 'I, III, IV e V',
+              D: 'I, II, IV e V',
+              E: 'I, II, III e IV'
+            }
+          },
+          {
+            num: 22,
+            answer: 'B',
+            stem: `Um dos principais objetivos do Método Científico é:`,
+            options: {
+              A: 'Ter o conhecimento vivencial',
+              B: 'O método científico não é único e pode ser variado e adaptado a cada área de estudo',
+              C: 'O método científico aponta o caminho do saber, desta forma, deverá ser seguido apenas um método',
+              D: 'Existem apenas 2 métodos científicos',
+              E: 'Dificulta o planejamento, por isto se torna científico'
+            }
+          },
+          {
+            num: 23,
+            answer: 'B',
+            stem: `De acordo com Gil (1999), "Método científico é conjunto de processos ou operações mentais que se deve empregar na investigação. É a linha de raciocínio adotada no processo de pesquisa". Diante a colocação do autor sobre o método científico, assinale a resposta correta:`,
+            options: {
+              A: 'O método científico é o conjunto de processos que serão refutados ao longo do trabalho',
+              B: 'O método científico é anterior à pesquisa propriamente dita',
+              C: 'O método científico deverá ser utilizado em conhecimentos filosóficos e empíricos',
+              D: 'O método científico deverá ser utilizado apenas para os conhecimentos empíricos',
+              E: 'O método científico deverá ser verificado após a investigação ser finalizada'
+            }
+          },
+          {
+            num: 24,
+            answer: 'E',
+            stem: `Os principais métodos para o desenvolvimento e a ordenação do raciocínio são:`,
+            options: {
+              A: 'Dedutivo; Imperativo; Hipotético-dedutivo; Dialético',
+              B: 'Discriminatório; Indutivo; Hipotético-dedutivo; Dialético',
+              C: 'Definitivo; Indutivo; Hipotético-dedutivo; Dialético',
+              D: 'Definitivo; Indutivo; Hipotético-dedutivo; Impiedoso',
+              E: 'Dedutivo; Indutivo; Hipotético-dedutivo; Dialético'
+            }
+          },
+          {
+            num: 25,
+            answer: 'D',
+            stem: `Os três níveis de desenvolvimento da inteligência nos seres humanos desde o surgimento são:`,
+            options: {
+              A: 'Misticismo; Cultura; Evolução',
+              B: 'Adulto; Idoso; Experiência da Ciência',
+              C: 'Evolução; Medo; Cultura',
+              D: 'Medo; Misticismo; Ciência',
+              E: 'Criança; Jovem; Adulto'
+            }
+          },
+          {
+            num: 26,
+            answer: 'B',
+            stem: `Com relação à evolução humana e à natureza da ciência é correto afirmar que:`,
+            options: {
+              A: 'A evolução humana é atribuída aos antepassados',
+              B: 'A evolução humana corresponde ao desenvolvimento de sua inteligência',
+              C: 'A inteligência é atribuída pela herança genética',
+              D: 'Quanto maior a bagagem cultural, maior será o trabalho',
+              E: 'A tecnologia foi a pioneira e essencial para a criação da ciência'
+            }
+          },
+          {
+            num: 27,
+            answer: 'E',
+            stem: `Pode-se dizer que o significado de Ciência é:`,
+            options: {
+              A: 'Os fenômenos da natureza e a organização das espécies',
+              B: 'O futuro correto e a organização histórica',
+              C: 'A busca pelo autodesenvolvimento e a organização ética de cada indivíduo',
+              D: 'A evolução da humanidade e a organização dos pensamentos',
+              E: 'A busca do conhecimento e a organização dos pensamentos'
+            }
+          },
+          {
+            num: 28,
+            answer: 'D',
+            stem: `O significado de Metodologia Científica pode ser considerado como:`,
+            options: {
+              A: 'Caminho da Ciência',
+              B: 'Estudos para o caminho',
+              C: 'Caminhos para estudar',
+              D: 'Caminhos do saber',
+              E: 'Estudos para saber'
+            }
+          },
+          {
+            num: 29,
+            answer: 'E',
+            stem: `É correto afirmar que a importância e os objetivos da Metodologia Científica são:
+I. Compreender os pressupostos fundamentais de iniciação à pesquisa e ao trabalho científico
+II. O maior objetivo da Metodologia Científica é saber escrever
+III. Desenvolver o raciocínio lógico e o espírito crítico e observador
+IV. Desenvolver a leitura dinâmica`,
+            options: {
+              A: 'Todas as afirmações estão corretas',
+              B: 'I, II e III estão corretas',
+              C: 'I e II estão corretas',
+              D: 'I, II e IV',
+              E: 'I e III estão corretas'
+            }
+          },
+          {
+            num: 30,
+            answer: 'C',
+            stem: `Com relação às Hipóteses no trabalho científico é correto afirmar que:`,
+            options: {
+              A: 'Sempre serão refutadas',
+              B: 'Nenhuma das alternativas estão corretas',
+              C: 'Podem ser refutadas ou comprovadas',
+              D: 'Sempre deverão ser comprovadas',
+              E: 'Deverão sofrer alterações ao longo da pesquisa para que sejam comprovadas'
+            }
+          }
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       PALETAS POR MATÉRIA (Classes explícitas para o JIT do Tailwind)
+       ========================================================================== */
+    const COLOR_STYLES = {
+      indigo: {
+        badge: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950/70 dark:text-indigo-300',
+        iconBg: 'bg-indigo-600 text-white shadow-indigo-500/25',
+        bar: 'bg-indigo-600 dark:bg-indigo-500',
+        btn: 'bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white shadow-indigo-500/20',
+        accentText: 'text-indigo-600 dark:text-indigo-400',
+        ring: 'ring-indigo-500/30',
+        borderTop: 'border-t-indigo-500',
+        pillActive: 'bg-indigo-600 text-white border-indigo-600'
+      },
+      teal: {
+        badge: 'bg-teal-100 text-teal-800 dark:bg-teal-950/70 dark:text-teal-300',
+        iconBg: 'bg-teal-600 text-white shadow-teal-500/25',
+        bar: 'bg-teal-600 dark:bg-teal-500',
+        btn: 'bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white shadow-teal-500/20',
+        accentText: 'text-teal-600 dark:text-teal-400',
+        ring: 'ring-teal-500/30',
+        borderTop: 'border-t-teal-500',
+        pillActive: 'bg-teal-600 text-white border-teal-600'
+      },
+      violet: {
+        badge: 'bg-violet-100 text-violet-700 dark:bg-violet-950/70 dark:text-violet-300',
+        iconBg: 'bg-violet-600 text-white shadow-violet-500/25',
+        bar: 'bg-violet-600 dark:bg-violet-500',
+        btn: 'bg-violet-600 hover:bg-violet-700 active:bg-violet-800 text-white shadow-violet-500/20',
+        accentText: 'text-violet-600 dark:text-violet-400',
+        ring: 'ring-violet-500/30',
+        borderTop: 'border-t-violet-500',
+        pillActive: 'bg-violet-600 text-white border-violet-600'
+      },
+      amber: {
+        badge: 'bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-300',
+        iconBg: 'bg-amber-500 text-white shadow-amber-500/25',
+        bar: 'bg-amber-500 dark:bg-amber-400',
+        btn: 'bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white shadow-amber-500/20',
+        accentText: 'text-amber-600 dark:text-amber-400',
+        ring: 'ring-amber-500/30',
+        borderTop: 'border-t-amber-500',
+        pillActive: 'bg-amber-600 text-white border-amber-600'
+      }
+    };
+
+    const FONT_SCALES = [
+      { label: 'Pequena', stem: 'text-sm sm:text-[15px]', opt: 'text-sm' },
+      { label: 'Normal', stem: 'text-[15px] sm:text-base', opt: 'text-[14px] sm:text-[15px]' },
+      { label: 'Média', stem: 'text-base sm:text-lg', opt: 'text-[15px] sm:text-base' },
+      { label: 'Grande', stem: 'text-lg sm:text-xl', opt: 'text-base sm:text-lg' },
+      { label: 'Extra', stem: 'text-xl sm:text-2xl', opt: 'text-lg sm:text-xl' }
+    ];
+
+    const STORAGE_KEY = 'direito_ead_mod2_banco_v1';
+    const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+
+    /* ==========================================================================
+       GERENCIAMENTO DE ESTADO E PERSISTÊNCIA
+       ========================================================================== */
+    function loadSavedState() {
+      const defaults = {
+        theme: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+        fontIndex: 1, // Normal
+        answers: { civil: {}, constitucional: {}, filosofia: {}, metodologia: {} },
+        bookmarks: { civil: {}, constitucional: {}, filosofia: {}, metodologia: {} },
+        lastQuestion: { civil: 1, constitucional: 1, filosofia: 1, metodologia: 1 },
+        shuffleQuestions: false,
+        shuffleOptions: false
+      };
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaults;
+        const parsed = JSON.parse(raw);
+        return {
+          ...defaults,
+          ...parsed,
+          answers: { ...defaults.answers, ...(parsed.answers || {}) },
+          bookmarks: { ...defaults.bookmarks, ...(parsed.bookmarks || {}) },
+          lastQuestion: { ...defaults.lastQuestion, ...(parsed.lastQuestion || {}) },
+          fontIndex: typeof parsed.fontIndex === 'number'
+            ? Math.max(0, Math.min(FONT_SCALES.length - 1, parsed.fontIndex))
+            : defaults.fontIndex
+        };
+      } catch (e) {
+        console.warn('Falha ao ler localStorage:', e);
+        return defaults;
+      }
+    }
+
+    let state = loadSavedState();
+
+    // Estado de navegação em memória
+    const ui = {
+      view: 'home', // 'home' | 'study'
+      subjectId: null,
+      filter: 'all', // 'all' | 'unanswered' | 'wrong' | 'bookmarked'
+      currentIndex: 0, // índice dentro da lista filtrada atual
+      shuffledOrder: {}, // { [subjectId]: [num1, num2, ...] }
+      shuffledOptOrder: {}, // { [subjectId]: { [num]: ['C','A','E','B','D'] } }
+      completionShownFor: {} // evita reabrir o modal repetidamente na mesma sessão
+    };
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('Falha ao salvar no localStorage:', e);
+      }
+    }
+
+    function applyTheme() {
+      const root = document.documentElement;
+      if (state.theme === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+    }
+
+    /* ==========================================================================
+       UTILITÁRIOS
+       ========================================================================== */
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function getSubject(id) {
+      return SUBJECTS.find(s => s.id === id);
+    }
+
+    function getSubjectStats(subject) {
+      const ans = state.answers[subject.id] || {};
+      const bms = state.bookmarks[subject.id] || {};
+      const total = subject.questions.length;
+      let answered = 0;
+      let correct = 0;
+      let wrong = 0;
+      let bookmarked = 0;
+
+      for (const q of subject.questions) {
+        if (bms[q.num]) bookmarked++;
+        const selected = ans[q.num];
+        if (selected) {
+          answered++;
+          if (selected === q.answer) correct++;
+          else wrong++;
+        }
+      }
+      const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+      const progress = Math.round((answered / total) * 100);
+      return { total, answered, correct, wrong, bookmarked, accuracy, progress };
+    }
+
+    function getOverallStats() {
+      let total = 0, answered = 0, correct = 0, wrong = 0;
+      for (const s of SUBJECTS) {
+        const st = getSubjectStats(s);
+        total += st.total;
+        answered += st.answered;
+        correct += st.correct;
+        wrong += st.wrong;
+      }
+      const accuracy = answered > 0 ? Math.round((correct / answered) * 100) : 0;
+      const progress = total > 0 ? Math.round((answered / total) * 100) : 0;
+      return { total, answered, correct, wrong, accuracy, progress };
+    }
+
+    function ensureShuffledOrder(subjectId, forceNew = false) {
+      const subject = getSubject(subjectId);
+      if (!subject) return;
+      if (!ui.shuffledOrder[subjectId] || forceNew) {
+        ui.shuffledOrder[subjectId] = shuffleArray(subject.questions.map(q => q.num));
+      }
+    }
+
+    function getOptionLettersForQuestion(subjectId, qNum) {
+      if (!state.shuffleOptions) {
+        return [...LETTERS];
+      }
+      if (!ui.shuffledOptOrder[subjectId]) {
+        ui.shuffledOptOrder[subjectId] = {};
+      }
+      if (!ui.shuffledOptOrder[subjectId][qNum]) {
+        ui.shuffledOptOrder[subjectId][qNum] = shuffleArray(LETTERS);
+      }
+      return ui.shuffledOptOrder[subjectId][qNum];
+    }
+
+    function getOrderedQuestions(subject) {
+      if (!state.shuffleQuestions) {
+        return subject.questions;
+      }
+      ensureShuffledOrder(subject.id, false);
+      const map = new Map(subject.questions.map(q => [q.num, q]));
+      return ui.shuffledOrder[subject.id].map(num => map.get(num)).filter(Boolean);
+    }
+
+    function getFilteredQuestions(subject) {
+      const ordered = getOrderedQuestions(subject);
+      const ans = state.answers[subject.id] || {};
+      const bms = state.bookmarks[subject.id] || {};
+
+      switch (ui.filter) {
+        case 'unanswered':
+          return ordered.filter(q => !ans[q.num]);
+        case 'wrong':
+          return ordered.filter(q => ans[q.num] && ans[q.num] !== q.answer);
+        case 'bookmarked':
+          return ordered.filter(q => !!bms[q.num]);
+        default:
+          return ordered;
+      }
+    }
+
+    function showToast(message) {
+      const el = document.getElementById('toast-root');
+      el.innerHTML = `
+        <div class="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 text-xs sm:text-sm font-medium px-4 py-2.5 rounded-full shadow-lg whitespace-nowrap">
+          ${escapeHtml(message)}
+        </div>
+      `;
+      el.classList.remove('opacity-0', 'translate-y-2');
+      el.classList.add('opacity-100', 'translate-y-0');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        el.classList.add('opacity-0', 'translate-y-2');
+        el.classList.remove('opacity-100', 'translate-y-0');
+      }, 2100);
+    }
+
+    /* ==========================================================================
+       ÍCONES SVG INLINE
+       ========================================================================== */
+    function getIcon(name, cls = 'w-5 h-5') {
+      const icons = {
+        scale: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v18m-7-4h14M5 8l-2 5a3 3 0 006 0L7 8m12 0l-2 5a3 3 0 006 0l-2-5M5 8h14"/></svg>`,
+        landmark: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M4 18h16M6 18V9m4 9V9m4 9V9m4 9V9M3 9l9-6 9 6H3z"/></svg>`,
+        book: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>`,
+        flask: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 3h6m-5 0v5.586a1 1 0 01-.293.707l-4.414 4.414A3 3 0 007.414 19h9.172a3 3 0 002.121-5.121l-4.414-4.414A1 1 0 0114 8.586V3"/></svg>`,
+        sun: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>`,
+        moon: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>`,
+        arrowLeft: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>`,
+        arrowRight: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>`,
+        check: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>`,
+        x: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>`,
+        starOutline: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>`,
+        starSolid: `<svg class="${cls}" fill="currentColor" viewBox="0 0 24 24"><path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>`,
+        grid: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>`,
+        shuffle: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>`,
+        refresh: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>`,
+        trash: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>`,
+        alert: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
+        trophy: `<svg class="${cls}" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 21h8m-4-4v4m-5-9a5 5 0 0010 0V4H7v8zm10-6h3a1 1 0 011 1v1a4 4 0 01-4 4m-10-6H4a1 1 0 00-1 1v1a4 4 0 004 4"/></svg>`
+      };
+      return icons[name] || '';
+    }
+
+    /* ==========================================================================
+       FORMATAÇÃO INTELIGENTE DO ENUNCIADO
+       Respeita quebras de linha, itens romanos (I, II...) e parênteses ( ) de V/F
+       ========================================================================== */
+    function formatStemHtml(stem) {
+      const lines = stem.split('\n');
+      return lines
+        .map(raw => {
+          const line = raw.trim();
+          if (!line) return '<div class="h-2"></div>';
+          const escaped = escapeHtml(line);
+          const isListItem =
+            /^\(\s*\)/.test(line) ||
+            /^(I|II|III|IV|V|VI|VII|VIII|IX|X)\s*[-–.]/.test(line) ||
+            /^[1-9]\.\s/.test(line);
+          if (isListItem) {
+            return `<p class="pl-3 border-l-2 border-slate-200 dark:border-slate-700 my-1.5 leading-relaxed">${escaped}</p>`;
+          }
+          return `<p class="my-1.5 leading-relaxed">${escaped}</p>`;
+        })
+        .join('');
+    }
+
+    /* ==========================================================================
+       RENDERIZAÇÃO: MENU INICIAL (DASHBOARD)
+       ========================================================================== */
+    function renderHome() {
+      const overall = getOverallStats();
+      const canDecFont = state.fontIndex > 0;
+      const canIncFont = state.fontIndex < FONT_SCALES.length - 1;
+
+      const cardsHtml = SUBJECTS.map(sub => {
+        const st = getSubjectStats(sub);
+        const palette = COLOR_STYLES[sub.color];
+        const statusLabel =
+          st.answered === 0
+            ? 'Pronto para iniciar'
+            : st.answered === st.total
+            ? 'Concluída ✓'
+            : `Em andamento (${st.progress}%)`;
+
+        return `
+          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 border-t-4 ${palette.borderTop} shadow-sm hover:shadow-md transition-all p-5 sm:p-6 flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-4">
+                <div class="flex items-center gap-3.5 min-w-0">
+                  <div class="w-12 h-12 rounded-2xl ${palette.iconBg} shadow-md flex items-center justify-center shrink-0">
+                    ${getIcon(sub.icon, 'w-6 h-6')}
+                  </div>
+                  <div class="min-w-0">
+                    <h2 class="text-lg font-bold text-slate-900 dark:text-white leading-snug">
+                      ${escapeHtml(sub.title)}
+                    </h2>
+                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 mt-0.5">
+                      ${st.total} questões • ${statusLabel}
+                    </p>
+                  </div>
+                </div>
+                <span class="shrink-0 text-xs font-bold px-2.5 py-1 rounded-full ${palette.badge}">
+                  ${st.answered}/${st.total}
+                </span>
+              </div>
+
+              ${
+                sub.notice
+                  ? `<div class="mb-4 flex items-start gap-2 rounded-xl bg-violet-50 dark:bg-violet-950/40 border border-violet-200/80 dark:border-violet-800/60 px-3 py-2 text-xs text-violet-800 dark:text-violet-200">
+                      <span class="shrink-0 mt-0.5">${getIcon('alert', 'w-4 h-4')}</span>
+                      <span>Contém questões com enunciados idênticos/similares (Q1–Q3 e Q15–Q20).</span>
+                    </div>`
+                  : ''
+              }
+
+              <!-- Barra de progresso -->
+              <div class="mb-4">
+                <div class="flex items-center justify-between text-xs font-medium text-slate-500 dark:text-slate-400 mb-1.5">
+                  <span>Progresso</span>
+                  <span class="font-semibold text-slate-700 dark:text-slate-200">${st.progress}%</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                  <div class="h-full ${palette.bar} rounded-full transition-all duration-500" style="width: ${st.progress}%"></div>
+                </div>
+              </div>
+
+              <!-- Mini métricas da matéria -->
+              <div class="grid grid-cols-3 gap-2 mb-5">
+                <div class="rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-900/60 px-3 py-2 text-center">
+                  <div class="text-lg font-extrabold text-emerald-700 dark:text-emerald-400">${st.correct}</div>
+                  <div class="text-[11px] font-semibold text-emerald-700/80 dark:text-emerald-300/80">Acertos</div>
+                </div>
+                <div class="rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 dark:border-rose-900/60 px-3 py-2 text-center">
+                  <div class="text-lg font-extrabold text-rose-700 dark:text-rose-400">${st.wrong}</div>
+                  <div class="text-[11px] font-semibold text-rose-700/80 dark:text-rose-300/80">Erros</div>
+                </div>
+                <div class="rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/70 dark:border-slate-700/60 px-3 py-2 text-center">
+                  <div class="text-lg font-extrabold text-slate-800 dark:text-slate-100">${st.accuracy}%</div>
+                  <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Aproveit.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ações do Card -->
+            <div class="flex items-center gap-2.5 pt-1">
+              <button
+                type="button"
+                onclick="openSubject('${sub.id}')"
+                class="flex-1 min-h-[48px] px-4 py-3 rounded-xl font-semibold text-sm sm:text-base shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2 ${palette.btn}">
+                <span>${st.answered > 0 && st.answered < st.total ? 'Continuar Estudo' : 'Estudar'}</span>
+                ${getIcon('arrowRight', 'w-4 h-4')}
+              </button>
+              <button
+                type="button"
+                onclick="confirmResetSubject('${sub.id}')"
+                title="Zerar progresso desta matéria"
+                aria-label="Zerar matéria ${escapeHtml(sub.title)}"
+                class="min-h-[48px] px-3.5 py-3 rounded-xl text-xs font-semibold text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 bg-slate-100 hover:bg-rose-50 dark:bg-slate-800 dark:hover:bg-rose-950/40 border border-slate-200/70 dark:border-slate-700 transition-colors flex items-center gap-1.5">
+                ${getIcon('trash', 'w-4 h-4')}
+                <span class="hidden sm:inline">Zerar</span>
+              </button>
+            </div>
+          </article>
+        `;
+      }).join('');
+
+      return `
+        <!-- Cabeçalho Dashboard -->
+        <header class="sticky top-0 z-30 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 safe-top">
+          <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-indigo-600 text-white font-extrabold text-sm shadow-sm shrink-0">
+                  M2
+                </span>
+                <h1 class="text-base sm:text-xl font-extrabold tracking-tight text-slate-900 dark:text-white truncate">
+                  Banco de Questões — Módulo 2
+                </h1>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 hidden sm:block">
+                Direito EAD • 4 matérias • 163 questões com gabarito oficial
+              </p>
+            </div>
+
+            <!-- Controles de Fonte e Tema -->
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <div class="inline-flex items-center rounded-xl bg-slate-100 dark:bg-slate-800 p-1 border border-slate-200/70 dark:border-slate-700">
+                <button
+                  type="button"
+                  onclick="changeFontSize(-1)"
+                  ${canDecFont ? '' : 'disabled'}
+                  aria-label="Diminuir fonte"
+                  class="w-9 h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-colors ${
+                    canDecFont
+                      ? 'text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700'
+                      : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                  }">
+                  A-
+                </button>
+                <button
+                  type="button"
+                  onclick="changeFontSize(1)"
+                  ${canIncFont ? '' : 'disabled'}
+                  aria-label="Aumentar fonte"
+                  class="w-9 h-9 rounded-lg text-xs font-bold flex items-center justify-center transition-colors ${
+                    canIncFont
+                      ? 'text-slate-700 dark:text-slate-200 hover:bg-white dark:hover:bg-slate-700'
+                      : 'text-slate-300 dark:text-slate-600 cursor-not-allowed'
+                  }">
+                  A+
+                </button>
+              </div>
+              <button
+                type="button"
+                onclick="toggleTheme()"
+                aria-label="Alternar tema claro ou escuro"
+                class="w-11 h-11 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200/70 dark:border-slate-700 flex items-center justify-center text-slate-700 dark:text-amber-300 transition-colors">
+                ${state.theme === 'dark' ? getIcon('sun', 'w-5 h-5') : getIcon('moon', 'w-5 h-5')}
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Conteúdo Principal Dashboard -->
+        <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-5 sm:py-8">
+          <!-- Placar Geral -->
+          <section class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-5 sm:p-6 mb-6 sm:mb-8">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+              <div>
+                <h2 class="text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Desempenho Geral
+                </h2>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Progresso salvo automaticamente neste dispositivo
+                </p>
+              </div>
+              <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+                ${overall.progress}% concluído
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+              <div class="rounded-xl bg-slate-50 dark:bg-slate-800/70 border border-slate-200/70 dark:border-slate-700/60 p-3.5">
+                <div class="text-xs font-medium text-slate-500 dark:text-slate-400">Respondidas</div>
+                <div class="text-2xl font-extrabold text-slate-900 dark:text-white mt-1">
+                  ${overall.answered}<span class="text-sm font-semibold text-slate-400">/${overall.total}</span>
+                </div>
+              </div>
+              <div class="rounded-xl bg-emerald-50/80 dark:bg-emerald-950/35 border border-emerald-200/70 dark:border-emerald-900/60 p-3.5">
+                <div class="text-xs font-medium text-emerald-700 dark:text-emerald-300">Total Acertos</div>
+                <div class="text-2xl font-extrabold text-emerald-700 dark:text-emerald-400 mt-1">
+                  ${overall.correct}
+                </div>
+              </div>
+              <div class="rounded-xl bg-rose-50/80 dark:bg-rose-950/35 border border-rose-200/70 dark:border-rose-900/60 p-3.5">
+                <div class="text-xs font-medium text-rose-700 dark:text-rose-300">Total Erros</div>
+                <div class="text-2xl font-extrabold text-rose-700 dark:text-rose-400 mt-1">
+                  ${overall.wrong}
+                </div>
+              </div>
+              <div class="rounded-xl bg-indigo-50/80 dark:bg-indigo-950/35 border border-indigo-200/70 dark:border-indigo-900/60 p-3.5">
+                <div class="text-xs font-medium text-indigo-700 dark:text-indigo-300">Aproveitamento</div>
+                <div class="text-2xl font-extrabold text-indigo-700 dark:text-indigo-400 mt-1">
+                  ${overall.accuracy}%
+                </div>
+              </div>
+            </div>
+
+            <div class="w-full h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-indigo-600 via-teal-500 to-emerald-500 rounded-full transition-all duration-500" style="width: ${overall.progress}%"></div>
+            </div>
+          </section>
+
+          <!-- Grade das 4 Matérias -->
+          <section aria-label="Matérias disponíveis" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            ${cardsHtml}
+          </section>
+
+          <footer class="mt-10 pb-6 text-center text-xs text-slate-400 dark:text-slate-500">
+            Banco de Questões — Direito EAD (Módulo 2) • Otimizado para iPad, iPhone, Android e Desktop
+          </footer>
+        </main>
+      `;
+    }
+
+    /* ==========================================================================
+       RENDERIZAÇÃO: TELA DE ESTUDO DA MATÉRIA
+       ========================================================================== */
+    function renderStudy() {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) {
+        ui.view = 'home';
+        return renderHome();
+      }
+
+      const palette = COLOR_STYLES[subject.color];
+      const st = getSubjectStats(subject);
+      const list = getFilteredQuestions(subject);
+      const scale = FONT_SCALES[state.fontIndex];
+
+      // Garante índice válido dentro da lista filtrada
+      if (list.length > 0) {
+        if (ui.currentIndex < 0) ui.currentIndex = 0;
+        if (ui.currentIndex >= list.length) ui.currentIndex = list.length - 1;
+      } else {
+        ui.currentIndex = 0;
+      }
+
+      const currentQ = list[ui.currentIndex] || null;
+      const subjectAnswers = state.answers[subject.id] || {};
+      const subjectBookmarks = state.bookmarks[subject.id] || {};
+
+      // Contagens para os filtros
+      const unansweredCount = st.total - st.answered;
+      const filters = [
+        { id: 'all', label: `Todas (${st.total})` },
+        { id: 'unanswered', label: `Não respondidas (${unansweredCount})` },
+        { id: 'wrong', label: `Erradas (${st.wrong})` },
+        { id: 'bookmarked', label: `Marcadas ★ (${st.bookmarked})` }
+      ];
+
+      let mainContentHtml = '';
+
+      if (!currentQ) {
+        // Estado vazio do filtro
+        const emptyMessages = {
+          unanswered: 'Parabéns! Você já respondeu todas as questões desta matéria.',
+          wrong: 'Excelente! Você não tem nenhuma questão errada para revisar no momento.',
+          bookmarked: 'Você ainda não marcou nenhuma questão com estrela ★ nesta matéria.',
+          all: 'Nenhuma questão encontrada.'
+        };
+        mainContentHtml = `
+          <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-8 sm:p-10 text-center shadow-sm animate-card">
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-300 flex items-center justify-center mb-4">
+              ${ui.filter === 'wrong' || ui.filter === 'unanswered' ? getIcon('trophy', 'w-7 h-7 text-emerald-500') : getIcon('starOutline', 'w-7 h-7')}
+            </div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">
+              Nenhuma questão neste filtro
+            </h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-6">
+              ${emptyMessages[ui.filter] || emptyMessages.all}
+            </p>
+            <button
+              type="button"
+              onclick="setFilter('all')"
+              class="min-h-[48px] px-5 py-3 rounded-xl font-semibold text-sm ${palette.btn} transition-all">
+              Ver todas as questões
+            </button>
+          </div>
+        `;
+      } else {
+        const selectedOriginal = subjectAnswers[currentQ.num] || null;
+        const isAnswered = !!selectedOriginal;
+        const isCorrect = selectedOriginal === currentQ.answer;
+        const isBookmarked = !!subjectBookmarks[currentQ.num];
+        const optionLetters = getOptionLettersForQuestion(subject.id, currentQ.num);
+
+        // Descobre a letra visual correspondente à escolha e ao gabarito caso esteja embaralhado
+        const visualLetters = LETTERS;
+        const selectedVisualIdx = selectedOriginal ? optionLetters.indexOf(selectedOriginal) : -1;
+        const selectedVisualLabel = selectedVisualIdx >= 0 ? visualLetters[selectedVisualIdx] : selectedOriginal;
+
+        // Renderiza botões das alternativas
+        const optionsHtml = optionLetters.map((origLetter, idx) => {
+          const displayLetter = state.shuffleOptions ? visualLetters[idx] : origLetter;
+          const optText = currentQ.options[origLetter];
+
+          let btnClasses =
+            'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700/80 hover:border-slate-400 dark:hover:border-slate-500 text-slate-800 dark:text-slate-100';
+          let badgeClasses =
+            'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700';
+          let rightIcon = '';
+
+          if (isAnswered) {
+            if (origLetter === currentQ.answer) {
+              // Alternativa CORRETA (sempre verde)
+              btnClasses =
+                'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-500 dark:border-emerald-500 text-emerald-950 dark:text-emerald-100 ring-2 ring-emerald-500/20';
+              badgeClasses = 'bg-emerald-600 text-white border-emerald-600';
+              rightIcon = `<span class="shrink-0 w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center">${getIcon('check', 'w-4 h-4')}</span>`;
+            } else if (origLetter === selectedOriginal) {
+              // Alternativa ERRADA clicada (vermelha)
+              btnClasses =
+                'bg-rose-50 dark:bg-rose-950/50 border-rose-500 dark:border-rose-500 text-rose-950 dark:text-rose-100 ring-2 ring-rose-500/20';
+              badgeClasses = 'bg-rose-600 text-white border-rose-600';
+              rightIcon = `<span class="shrink-0 w-7 h-7 rounded-full bg-rose-600 text-white flex items-center justify-center">${getIcon('x', 'w-4 h-4')}</span>`;
+            } else {
+              // Demais alternativas não escolhidas
+              btnClasses =
+                'bg-slate-50/70 dark:bg-slate-900/50 border-slate-200/60 dark:border-slate-800 text-slate-500 dark:text-slate-400 opacity-75';
+              badgeClasses =
+                'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 border border-slate-200/70 dark:border-slate-700';
+            }
+          }
+
+          const officialHint =
+            isAnswered && state.shuffleOptions && (origLetter === currentQ.answer || origLetter === selectedOriginal)
+              ? `<span class="inline-block ml-2 text-[11px] font-bold px-2 py-0.5 rounded-md bg-black/5 dark:bg-white/10">Oficial: ${origLetter}</span>`
+              : '';
+
+          return `
+            <button
+              type="button"
+              ${isAnswered ? 'disabled' : `onclick="selectOption(${currentQ.num}, '${origLetter}')"`}
+              class="w-full min-h-[56px] text-left rounded-2xl border-2 p-3.5 sm:p-4 transition-all duration-150 flex items-center gap-3.5 ${
+                isAnswered ? 'cursor-default' : 'cursor-pointer active:scale-[0.99]'
+              } ${btnClasses}">
+              <span class="shrink-0 w-9 h-9 rounded-xl font-extrabold text-sm flex items-center justify-center transition-colors ${badgeClasses}">
+                ${displayLetter}
+              </span>
+              <span class="flex-1 ${scale.opt} leading-snug font-medium">
+                ${escapeHtml(optText)}${officialHint}
+              </span>
+              ${rightIcon}
+            </button>
+          `;
+        }).join('');
+
+        // Banner de Feedback Imediato
+        let feedbackHtml = '';
+        if (isAnswered) {
+          if (isCorrect) {
+            feedbackHtml = `
+              <div class="mt-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border-2 border-emerald-500/80 p-4 flex items-start gap-3 text-emerald-900 dark:text-emerald-100 animate-card">
+                <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                  ${getIcon('check', 'w-5 h-5')}
+                </div>
+                <div class="text-sm sm:text-base font-semibold leading-snug">
+                  ✓ Resposta Correta! <span class="font-extrabold">(Gabarito oficial: ${currentQ.answer})</span>
+                </div>
+              </div>
+            `;
+          } else {
+            const markedText = state.shuffleOptions
+              ? `alternativa ${selectedVisualLabel} (original ${selectedOriginal})`
+              : selectedOriginal;
+            feedbackHtml = `
+              <div class="mt-5 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border-2 border-rose-500/80 p-4 flex items-start gap-3 text-rose-900 dark:text-rose-100 animate-card">
+                <div class="w-8 h-8 rounded-full bg-rose-600 text-white flex items-center justify-center shrink-0 mt-0.5">
+                  ${getIcon('x', 'w-5 h-5')}
+                </div>
+                <div class="text-sm sm:text-base font-semibold leading-snug">
+                  ✕ Resposta Incorreta! Você marcou <span class="font-extrabold">${markedText}</span> — o gabarito oficial é <span class="font-extrabold underline decoration-2">${currentQ.answer}</span>.
+                </div>
+              </div>
+            `;
+          }
+        }
+
+        const positionInFilter =
+          ui.filter !== 'all' || state.shuffleQuestions
+            ? `<span class="text-xs font-medium text-slate-400 dark:text-slate-500 ml-2">(${ui.currentIndex + 1}/${list.length} na lista)</span>`
+            : '';
+
+        mainContentHtml = `
+          <article class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-sm p-5 sm:p-7 animate-card">
+            <!-- Cabeçalho da Questão -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
+              <div class="flex items-center flex-wrap">
+                <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-extrabold px-3 py-1.5 rounded-xl ${palette.badge}">
+                  Questão ${currentQ.num} de ${subject.questions.length}
+                </span>
+                ${positionInFilter}
+              </div>
+
+              <div class="flex items-center gap-2">
+                ${
+                  isAnswered
+                    ? `<button
+                        type="button"
+                        onclick="redoQuestion(${currentQ.num})"
+                        class="min-h-[40px] px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors flex items-center gap-1.5">
+                        ${getIcon('refresh', 'w-3.5 h-3.5')}
+                        <span>Refazer</span>
+                      </button>`
+                    : ''
+                }
+                <button
+                  type="button"
+                  onclick="toggleBookmark(${currentQ.num})"
+                  aria-label="${isBookmarked ? 'Remover marcação para revisão' : 'Marcar questão para revisar'}"
+                  class="min-h-[40px] px-3 py-1.5 rounded-xl text-xs font-semibold border transition-colors flex items-center gap-1.5 ${
+                    isBookmarked
+                      ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-400 text-amber-700 dark:text-amber-300'
+                      : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                  }">
+                  ${isBookmarked ? getIcon('starSolid', 'w-4 h-4 text-amber-500') : getIcon('starOutline', 'w-4 h-4')}
+                  <span class="hidden sm:inline">${isBookmarked ? 'Marcada' : 'Marcar'}</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Enunciado -->
+            <div class="text-slate-800 dark:text-slate-100 font-medium ${scale.stem} mb-6">
+              ${formatStemHtml(currentQ.stem)}
+            </div>
+
+            <!-- Alternativas -->
+            <div class="space-y-3" role="radiogroup" aria-label="Alternativas da questão ${currentQ.num}">
+              ${optionsHtml}
+            </div>
+
+            <!-- Feedback -->
+            ${feedbackHtml}
+          </article>
+        `;
+      }
+
+      const canPrev = list.length > 0 && ui.currentIndex > 0;
+      const canNext = list.length > 0 && ui.currentIndex < list.length - 1;
+
+      return `
+        <!-- Barra Superior Fixa -->
+        <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 safe-top">
+          <div class="max-w-4xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3">
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                <button
+                  type="button"
+                  onclick="goHome()"
+                  class="min-h-[42px] px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs sm:text-sm flex items-center gap-1 shrink-0 transition-colors">
+                  ${getIcon('arrowLeft', 'w-4 h-4')}
+                  <span>Menu</span>
+                </button>
+                <div class="min-w-0">
+                  <h1 class="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white truncate">
+                    ${escapeHtml(subject.title)}
+                  </h1>
+                  <!-- Mini-placar ao vivo -->
+                  <div class="flex items-center gap-2 text-[11px] sm:text-xs font-bold mt-0.5 flex-wrap">
+                    <span class="text-emerald-600 dark:text-emerald-400">✓ ${st.correct}</span>
+                    <span class="text-rose-600 dark:text-rose-400">✕ ${st.wrong}</span>
+                    <span class="text-slate-500 dark:text-slate-400">${st.answered}/${st.total}</span>
+                    <span class="px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">${st.accuracy}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Controles rápidos do topo: Fonte, Tema, Mapa -->
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onclick="openQuestionMap()"
+                  class="min-h-[42px] px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs sm:text-sm flex items-center gap-1.5 transition-colors">
+                  ${getIcon('grid', 'w-4 h-4')}
+                  <span class="hidden sm:inline">Mapa</span>
+                </button>
+                <button
+                  type="button"
+                  onclick="toggleTheme()"
+                  aria-label="Alternar tema"
+                  class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-700 dark:text-amber-300 transition-colors">
+                  ${state.theme === 'dark' ? getIcon('sun', 'w-4 h-4') : getIcon('moon', 'w-4 h-4')}
+                </button>
+              </div>
+            </div>
+
+            <!-- Barra fina de progresso -->
+            <div class="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden mt-2.5">
+              <div class="h-full ${palette.bar} transition-all duration-300" style="width: ${st.progress}%"></div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Barra de Filtros e Opções (compacta e deslizável no mobile) -->
+        <div class="bg-slate-100/70 dark:bg-slate-900/50 border-b border-slate-200/70 dark:border-slate-800/80">
+          <div class="max-w-4xl mx-auto px-3 sm:px-6 py-2.5 space-y-2">
+            <!-- Linha 1: Filtros -->
+            <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+              ${filters
+                .map(
+                  f => `
+                <button
+                  type="button"
+                  onclick="setFilter('${f.id}')"
+                  class="shrink-0 min-h-[36px] px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+                    ui.filter === f.id
+                      ? palette.pillActive + ' shadow-sm'
+                      : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700'
+                  }">
+                  ${f.label}
+                </button>
+              `
+                )
+                .join('')}
+            </div>
+
+            <!-- Linha 2: Toggles, Fonte e Reiniciar -->
+            <div class="flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pt-0.5">
+              <div class="flex items-center gap-1.5 shrink-0">
+                <button
+                  type="button"
+                  onclick="toggleShuffleQuestions()"
+                  class="min-h-[34px] px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold border flex items-center gap-1.5 transition-colors ${
+                    state.shuffleQuestions
+                      ? 'bg-indigo-100 dark:bg-indigo-950/70 border-indigo-400 text-indigo-800 dark:text-indigo-200'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                  }">
+                  ${getIcon('shuffle', 'w-3.5 h-3.5')}
+                  <span>Embaralhar Questões</span>
+                </button>
+
+                <button
+                  type="button"
+                  onclick="toggleShuffleOptions()"
+                  class="min-h-[34px] px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold border flex items-center gap-1.5 transition-colors ${
+                    state.shuffleOptions
+                      ? 'bg-indigo-100 dark:bg-indigo-950/70 border-indigo-400 text-indigo-800 dark:text-indigo-200'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300'
+                  }">
+                  ${getIcon('shuffle', 'w-3.5 h-3.5')}
+                  <span>Embaralhar Alternativas</span>
+                </button>
+              </div>
+
+              <div class="flex items-center gap-1.5 shrink-0">
+                <div class="inline-flex items-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 overflow-hidden">
+                  <button
+                    type="button"
+                    onclick="changeFontSize(-1)"
+                    class="px-2.5 h-[34px] text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+                    A-
+                  </button>
+                  <button
+                    type="button"
+                    onclick="changeFontSize(1)"
+                    class="px-2.5 h-[34px] text-[11px] font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 border-l border-slate-200 dark:border-slate-700">
+                    A+
+                  </button>
+                </div>
+
+                ${
+                  st.answered === st.total
+                    ? `<button
+                        type="button"
+                        onclick="openCompletionModal()"
+                        class="min-h-[34px] px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+                        ${getIcon('trophy', 'w-3.5 h-3.5')}
+                        <span>Resumo</span>
+                      </button>`
+                    : ''
+                }
+
+                <button
+                  type="button"
+                  onclick="confirmResetSubject('${subject.id}')"
+                  class="min-h-[34px] px-2.5 py-1 rounded-lg text-[11px] sm:text-xs font-semibold bg-white dark:bg-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-slate-600 hover:text-rose-600 dark:text-slate-300 dark:hover:text-rose-400 border border-slate-200 dark:border-slate-700 flex items-center gap-1 transition-colors">
+                  ${getIcon('trash', 'w-3.5 h-3.5')}
+                  <span>Reiniciar</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Corpo da Questão -->
+        <main class="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-6 pt-4 pb-28">
+          ${
+            subject.notice
+              ? `<div class="mb-4 rounded-2xl bg-violet-50 dark:bg-violet-950/50 border border-violet-300/80 dark:border-violet-800 p-3.5 sm:p-4 flex items-start gap-3 text-violet-900 dark:text-violet-100 text-xs sm:text-sm">
+                  <span class="shrink-0 mt-0.5 text-violet-600 dark:text-violet-300">${getIcon('alert', 'w-5 h-5')}</span>
+                  <p class="leading-relaxed font-medium">${escapeHtml(subject.notice)}</p>
+                </div>`
+              : ''
+          }
+          ${mainContentHtml}
+        </main>
+
+        <!-- Rodapé Fixo de Navegação -->
+        <footer class="fixed bottom-0 inset-x-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800 safe-bottom">
+          <div class="max-w-4xl mx-auto px-3 sm:px-6 pt-3 flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onclick="navigate(-1)"
+              ${canPrev ? '' : 'disabled'}
+              class="flex-1 min-h-[50px] px-4 py-3 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 border transition-all ${
+                canPrev
+                  ? 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border-slate-300 dark:border-slate-700 active:scale-[0.98]'
+                  : 'bg-slate-100 dark:bg-slate-900 text-slate-300 dark:text-slate-700 border-slate-200 dark:border-slate-800 cursor-not-allowed'
+              }">
+              ${getIcon('arrowLeft', 'w-5 h-5')}
+              <span>Anterior</span>
+            </button>
+
+            <button
+              type="button"
+              onclick="openQuestionMap()"
+              aria-label="Abrir mapa de questões"
+              class="min-h-[50px] px-3.5 py-3 rounded-xl font-bold text-xs sm:text-sm bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shrink-0">
+              ${currentQ ? `${ui.currentIndex + 1}/${list.length}` : '0/0'}
+            </button>
+
+            <button
+              type="button"
+              onclick="navigate(1)"
+              ${canNext ? '' : 'disabled'}
+              class="flex-1 min-h-[50px] px-4 py-3 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-sm transition-all ${
+                canNext
+                  ? palette.btn + ' active:scale-[0.98]'
+                  : 'bg-slate-100 dark:bg-slate-900 text-slate-300 dark:text-slate-700 border border-slate-200 dark:border-slate-800 cursor-not-allowed shadow-none'
+              }">
+              <span>Próxima</span>
+              ${getIcon('arrowRight', 'w-5 h-5')}
+            </button>
+          </div>
+        </footer>
+      `;
+    }
+
+    function render() {
+      applyTheme();
+      const appEl = document.getElementById('app');
+      appEl.innerHTML = ui.view === 'study' ? renderStudy() : renderHome();
+    }
+
+    /* ==========================================================================
+       AÇÕES E INTERAÇÕES
+       ========================================================================== */
+    function openSubject(subjectId) {
+      ui.subjectId = subjectId;
+      ui.view = 'study';
+      ui.filter = 'all';
+      if (state.shuffleQuestions) {
+        ensureShuffledOrder(subjectId, false);
+      }
+      const subject = getSubject(subjectId);
+      const list = getFilteredQuestions(subject);
+      const lastNum = state.lastQuestion[subjectId] || 1;
+      const idx = list.findIndex(q => q.num === lastNum);
+      ui.currentIndex = idx >= 0 ? idx : 0;
+      render();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function goHome() {
+      ui.view = 'home';
+      closeModal();
+      render();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function selectOption(qNum, origLetter) {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) return;
+      if (!state.answers[subject.id]) state.answers[subject.id] = {};
+      if (state.answers[subject.id][qNum]) return; // Já respondida
+
+      state.answers[subject.id][qNum] = origLetter;
+      state.lastQuestion[subject.id] = qNum;
+      saveState();
+
+      const st = getSubjectStats(subject);
+      render();
+
+      // Verifica se concluiu todas as questões da matéria
+      if (st.answered === st.total && !ui.completionShownFor[subject.id]) {
+        ui.completionShownFor[subject.id] = true;
+        setTimeout(() => {
+          if (ui.view === 'study' && ui.subjectId === subject.id) {
+            openCompletionModal();
+          }
+        }, 550);
+      }
+    }
+
+    function redoQuestion(qNum) {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) return;
+      if (state.answers[subject.id] && state.answers[subject.id][qNum]) {
+        delete state.answers[subject.id][qNum];
+        delete ui.completionShownFor[subject.id];
+        saveState();
+        render();
+        showToast(`Questão ${qNum} liberada para refazer.`);
+      }
+    }
+
+    function toggleBookmark(qNum) {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) return;
+      if (!state.bookmarks[subject.id]) state.bookmarks[subject.id] = {};
+      if (state.bookmarks[subject.id][qNum]) {
+        delete state.bookmarks[subject.id][qNum];
+        showToast(`Marcação removida da Q${qNum}.`);
+      } else {
+        state.bookmarks[subject.id][qNum] = true;
+        showToast(`Q${qNum} marcada para revisão ★`);
+      }
+      saveState();
+      render();
+    }
+
+    function setFilter(filterId) {
+      ui.filter = filterId;
+      ui.currentIndex = 0;
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function navigate(delta) {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) return;
+      const list = getFilteredQuestions(subject);
+      if (list.length === 0) return;
+
+      const nextIdx = ui.currentIndex + delta;
+      if (nextIdx >= 0 && nextIdx < list.length) {
+        ui.currentIndex = nextIdx;
+        state.lastQuestion[subject.id] = list[ui.currentIndex].num;
+        saveState();
+        render();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function jumpToQuestion(qNum) {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) return;
+      let list = getFilteredQuestions(subject);
+      let idx = list.findIndex(q => q.num === qNum);
+
+      // Se a questão clicada não está no filtro atual, volta para "Todas"
+      if (idx === -1) {
+        ui.filter = 'all';
+        list = getFilteredQuestions(subject);
+        idx = list.findIndex(q => q.num === qNum);
+      }
+
+      if (idx >= 0) {
+        ui.currentIndex = idx;
+        state.lastQuestion[subject.id] = qNum;
+        saveState();
+      }
+      closeModal();
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function toggleShuffleQuestions() {
+      state.shuffleQuestions = !state.shuffleQuestions;
+      if (state.shuffleQuestions && ui.subjectId) {
+        ensureShuffledOrder(ui.subjectId, true);
+      }
+      ui.currentIndex = 0;
+      saveState();
+      render();
+      showToast(state.shuffleQuestions ? 'Ordem das questões embaralhada.' : 'Ordem original das questões restaurada.');
+    }
+
+    function toggleShuffleOptions() {
+      state.shuffleOptions = !state.shuffleOptions;
+      if (state.shuffleOptions) {
+        ui.shuffledOptOrder = {};
+      }
+      saveState();
+      render();
+      showToast(
+        state.shuffleOptions
+          ? 'Alternativas embaralhadas (gabarito oficial preservado).'
+          : 'Ordem oficial das alternativas (A–E) restaurada.'
+      );
+    }
+
+    function toggleTheme() {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      saveState();
+      render();
+    }
+
+    function changeFontSize(delta) {
+      const next = Math.max(0, Math.min(FONT_SCALES.length - 1, state.fontIndex + delta));
+      if (next !== state.fontIndex) {
+        state.fontIndex = next;
+        saveState();
+        render();
+        showToast(`Tamanho da fonte: ${FONT_SCALES[state.fontIndex].label}`);
+      }
+    }
+
+    /* ==========================================================================
+       MODAIS (MAPA DE QUESTÕES, CONCLUSÃO E CONFIRMAÇÃO — SEM alert/confirm)
+       ========================================================================== */
+    function openModal(html) {
+      const root = document.getElementById('modal-root');
+      root.innerHTML = html;
+      root.classList.remove('hidden');
+      root.classList.add('flex');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeModal() {
+      const root = document.getElementById('modal-root');
+      root.classList.add('hidden');
+      root.classList.remove('flex');
+      root.innerHTML = '';
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    // Fechar ao clicar fora do conteúdo do modal
+    document.getElementById('modal-root').addEventListener('click', e => {
+      if (e.target.id === 'modal-root') closeModal();
+    });
+
+    function openQuestionMap() {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) return;
+      const ans = state.answers[subject.id] || {};
+      const bms = state.bookmarks[subject.id] || {};
+      const list = getFilteredQuestions(subject);
+      const activeQNum = list[ui.currentIndex] ? list[ui.currentIndex].num : null;
+
+      const gridHtml = subject.questions
+        .map(q => {
+          const sel = ans[q.num];
+          const isCurrent = q.num === activeQNum;
+          const isMarked = !!bms[q.num];
+
+          let tileClasses =
+            'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700';
+          if (sel) {
+            if (sel === q.answer) {
+              tileClasses =
+                'bg-emerald-500 text-white border-emerald-600 hover:bg-emerald-600';
+            } else {
+              tileClasses =
+                'bg-rose-500 text-white border-rose-600 hover:bg-rose-600';
+            }
+          }
+          const currentRing = isCurrent
+            ? 'ring-3 ring-blue-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-900 border-blue-600 scale-105 z-10'
+            : '';
+
+          return `
+            <button
+              type="button"
+              onclick="jumpToQuestion(${q.num})"
+              class="relative h-12 rounded-xl font-bold text-sm border transition-all flex items-center justify-center ${tileClasses} ${currentRing}">
+              <span>${q.num}</span>
+              ${
+                isMarked
+                  ? `<span class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-amber-400 text-amber-950 flex items-center justify-center shadow-sm">${getIcon('starSolid', 'w-3 h-3')}</span>`
+                  : ''
+              }
+            </button>
+          `;
+        })
+        .join('');
+
+      openModal(`
+        <div class="bg-white dark:bg-slate-900 w-full max-w-xl max-h-[85vh] rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col overflow-hidden animate-modal">
+          <div class="px-5 py-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+                Mapa de Questões
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">
+                ${escapeHtml(subject.title)} • Toque em um número para ir direto
+              </p>
+            </div>
+            <button
+              type="button"
+              onclick="closeModal()"
+              aria-label="Fechar mapa"
+              class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center">
+              ${getIcon('x', 'w-5 h-5')}
+            </button>
+          </div>
+
+          <!-- Legenda -->
+          <div class="px-5 py-3 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200/70 dark:border-slate-800 flex flex-wrap items-center gap-3 text-xs font-semibold text-slate-600 dark:text-slate-300">
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span>Acertou</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500"></span>Errou</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-slate-300 dark:bg-slate-700"></span>Pendente</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded border-2 border-blue-500"></span>Atual</span>
+            <span class="inline-flex items-center gap-1.5 text-amber-600 dark:text-amber-400">★ Marcada</span>
+          </div>
+
+          <!-- Grade de números -->
+          <div class="p-5 overflow-y-auto grid grid-cols-5 sm:grid-cols-8 gap-2.5">
+            ${gridHtml}
+          </div>
+        </div>
+      `);
+    }
+
+    function openCompletionModal() {
+      const subject = getSubject(ui.subjectId);
+      if (!subject) return;
+      const st = getSubjectStats(subject);
+      const nota = ((st.correct / st.total) * 10).toFixed(1).replace('.', ',');
+      const palette = COLOR_STYLES[subject.color];
+
+      const circumference = 2 * Math.PI * 44;
+      const offset = circumference - (st.accuracy / 100) * circumference;
+      const strokeColor = st.accuracy >= 70 ? '#10b981' : st.accuracy >= 50 ? '#f59e0b' : '#f43f5e';
+
+      const msg =
+        st.accuracy === 100
+          ? 'Desempenho impecável! Você gabaritou esta matéria!'
+          : st.accuracy >= 70
+          ? 'Ótimo resultado! Você dominou a maior parte do conteúdo.'
+          : 'Bom treino! Revise as questões erradas para fixar os detalhes.';
+
+      openModal(`
+        <div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-7 text-center animate-modal">
+          <div class="inline-flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider px-3 py-1 rounded-full ${palette.badge} mb-3">
+            ${getIcon('trophy', 'w-4 h-4')}
+            <span>Matéria Concluída</span>
+          </div>
+
+          <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-1">
+            ${escapeHtml(subject.title)}
+          </h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mb-5">
+            ${msg}
+          </p>
+
+          <!-- Gráfico Circular -->
+          <div class="relative w-32 h-32 mx-auto mb-5 flex items-center justify-center">
+            <svg class="w-32 h-32 -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="9" class="text-slate-100 dark:text-slate-800"></circle>
+              <circle cx="50" cy="50" r="44" fill="none" stroke="${strokeColor}" stroke-width="9" stroke-linecap="round"
+                stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span class="text-2xl font-extrabold text-slate-900 dark:text-white">${st.accuracy}%</span>
+              <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400">Nota ${nota}</span>
+            </div>
+          </div>
+
+          <!-- Resumo Numérico -->
+          <div class="grid grid-cols-3 gap-2.5 mb-6">
+            <div class="rounded-2xl bg-slate-50 dark:bg-slate-800 p-3">
+              <div class="text-lg font-extrabold text-slate-900 dark:text-white">${st.total}</div>
+              <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Questões</div>
+            </div>
+            <div class="rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 p-3">
+              <div class="text-lg font-extrabold text-emerald-600 dark:text-emerald-400">${st.correct}</div>
+              <div class="text-[11px] font-semibold text-emerald-700/80 dark:text-emerald-300/80">Acertos</div>
+            </div>
+            <div class="rounded-2xl bg-rose-50 dark:bg-rose-950/40 p-3">
+              <div class="text-lg font-extrabold text-rose-600 dark:text-rose-400">${st.wrong}</div>
+              <div class="text-[11px] font-semibold text-rose-700/80 dark:text-rose-300/80">Erros</div>
+            </div>
+          </div>
+
+          <div class="space-y-2.5">
+            ${
+              st.wrong > 0
+                ? `<button
+                    type="button"
+                    onclick="reviewWrongFromModal()"
+                    class="w-full min-h-[48px] px-4 py-3 rounded-xl font-bold text-sm bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition-all">
+                    Revisar apenas as erradas (${st.wrong})
+                  </button>`
+                : ''
+            }
+            <button
+              type="button"
+              onclick="goHome()"
+              class="w-full min-h-[48px] px-4 py-3 rounded-xl font-bold text-sm ${palette.btn} transition-all">
+              Voltar ao Menu Inicial
+            </button>
+            <button
+              type="button"
+              onclick="closeModal()"
+              class="w-full min-h-[44px] px-4 py-2.5 rounded-xl font-semibold text-xs text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+              Continuar nesta tela
+            </button>
+          </div>
+        </div>
+      `);
+    }
+
+    function reviewWrongFromModal() {
+      closeModal();
+      setFilter('wrong');
+    }
+
+    function confirmResetSubject(subjectId) {
+      const subject = getSubject(subjectId);
+      if (!subject) return;
+      openModal(`
+        <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 text-center animate-modal">
+          <div class="w-12 h-12 mx-auto rounded-2xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mb-4">
+            ${getIcon('trash', 'w-6 h-6')}
+          </div>
+          <h3 class="text-lg font-extrabold text-slate-900 dark:text-white mb-2">
+            Reiniciar matéria?
+          </h3>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+            Todas as suas respostas e o placar de <strong class="text-slate-800 dark:text-slate-200">${escapeHtml(subject.title)}</strong> serão apagados. As demais matérias continuarão intactas.
+          </p>
+          <div class="flex items-center gap-2.5">
+            <button
+              type="button"
+              onclick="closeModal()"
+              class="flex-1 min-h-[46px] px-4 py-2.5 rounded-xl font-semibold text-sm bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors">
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onclick="executeResetSubject('${subject.id}')"
+              class="flex-1 min-h-[46px] px-4 py-2.5 rounded-xl font-bold text-sm bg-rose-600 hover:bg-rose-700 text-white shadow-sm transition-colors">
+              Sim, zerar
+            </button>
+          </div>
+        </div>
+      `);
+    }
+
+    function executeResetSubject(subjectId) {
+      state.answers[subjectId] = {};
+      state.lastQuestion[subjectId] = 1;
+      delete ui.completionShownFor[subjectId];
+      if (ui.subjectId === subjectId) {
+        ui.filter = 'all';
+        ui.currentIndex = 0;
+      }
+      saveState();
+      closeModal();
+      render();
+      const subject = getSubject(subjectId);
+      showToast(`Progresso de ${subject ? subject.shortTitle : 'matéria'} zerado.`);
+    }
+
+    /* ==========================================================================
+       ATALHOS DE TECLADO (Desktop e iPad com teclado)
+       ========================================================================== */
+    document.addEventListener('keydown', e => {
+      const modalOpen = !document.getElementById('modal-root').classList.contains('hidden');
+      if (e.key === 'Escape' && modalOpen) {
+        closeModal();
+        return;
+      }
+      if (ui.view !== 'study' || modalOpen) return;
+
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        navigate(-1);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        navigate(1);
+      } else {
+        const keyUpper = e.key.toUpperCase();
+        const idx = LETTERS.indexOf(keyUpper);
+        if (idx >= 0 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+          const subject = getSubject(ui.subjectId);
+          if (!subject) return;
+          const list = getFilteredQuestions(subject);
+          const currentQ = list[ui.currentIndex];
+          if (!currentQ) return;
+          if (state.answers[subject.id] && state.answers[subject.id][currentQ.num]) return;
+          const optionLetters = getOptionLettersForQuestion(subject.id, currentQ.num);
+          const origLetter = optionLetters[idx];
+          if (origLetter) selectOption(currentQ.num, origLetter);
+        }
+      }
+    });
+
+    /* ==========================================================================
+       INICIALIZAÇÃO
+       ========================================================================== */
+    render();
+  </script>
+</body>
+</html>
